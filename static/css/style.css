@@ -1,0 +1,1104 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+    color: #333;
+}
+
+header {
+    position: relative;
+    color: white;
+    text-align: center;
+    padding: 1rem;
+    background-size: cover;
+    background-position: center;
+    min-height: 200px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+header::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: url('/static/images/header.jpg');
+    background-size: cover;
+    background-position: center;
+    filter: blur(10px);
+    z-index: -1;
+}
+
+header::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(76, 175, 80, 0.5);
+    z-index: 0;
+}
+
+header h1,
+header p {
+    position: relative;
+    z-index: 1;
+    margin: 0;
+}
+
+nav {
+    background-color: #333;
+    padding: 0.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.nav-auth {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-left: 1rem;
+}
+
+.nav-auth .username {
+    color: white;
+    font-weight: bold;
+    padding: 0.5rem 1rem;
+}
+
+.nav-auth a {
+    text-decoration: none;
+}
+
+.nav-auth button {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 3px;
+    cursor: pointer;
+    font-size: 0.9rem;
+}
+
+.nav-auth button:hover {
+    background-color: #45a049;
+}
+
+.nav-auth button.btn-secondary {
+    background-color: #555;
+}
+
+.nav-auth button.btn-secondary:hover {
+    background-color: #777;
+}
+
+nav ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    text-align: center;
+    flex: 1;
+}
+
+nav ul li {
+    display: inline;
+    margin: 0 1rem;
+}
+
+nav ul li a {
+    color: white;
+    text-decoration: none;
+    padding: 0.5rem;
+}
+
+nav ul li a:hover {
+    background-color: #555;
+}
+
+main {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
+}
+
+section {
+    background-color: white;
+    margin-bottom: 2rem;
+    padding: 1.5rem;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+section h2 {
+    color: #4CAF50;
+    border-bottom: 2px solid #4CAF50;
+    padding-bottom: 0.5rem;
+}
+
+button {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 3px;
+    cursor: pointer;
+    font-size: 1rem;
+}
+
+button:hover {
+    background-color: #45a049;
+}
+
+footer {
+    background-color: #333;
+    color: white;
+    text-align: center;
+    padding: 1rem;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+}
+
+.course-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1rem;
+}
+
+.course {
+    background-color: white;
+    margin-bottom: 1rem;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    border: 1px solid #ddd;
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.course:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+.course-image {
+    width: 100%;
+    height: 250px;
+    object-fit: cover;
+    display: block;
+}
+
+.course-content {
+    padding: 1.5rem;
+}
+
+.course h3 {
+    color: #4CAF50;
+    margin-top: 0;
+}
+
+.course p {
+    margin: 0.5rem 0;
+}
+
+form {
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+form label {
+    display: block;
+    margin-top: 1rem;
+    font-weight: bold;
+}
+
+form input, form textarea {
+    width: 100%;
+    padding: 0.5rem;
+    margin-top: 0.25rem;
+    border: 1px solid #ddd;
+    border-radius: 3px;
+    box-sizing: border-box;
+}
+
+form textarea {
+    height: 100px;
+    resize: vertical;
+}
+
+form button {
+    margin-top: 1rem;
+    margin-right: 0.5rem;
+}
+
+.login-form {
+    max-width: 400px;
+}
+
+.login-form input {
+    padding: 0.75rem;
+    font-size: 1rem;
+}
+
+.login-form button {
+    width: 100%;
+    padding: 0.75rem;
+    font-size: 1rem;
+    margin-top: 1.5rem;
+}
+
+.auth-link {
+    text-align: center;
+    margin-top: 1.5rem;
+}
+
+.auth-link a {
+    color: #4CAF50;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.auth-link a:hover {
+    text-decoration: underline;
+}
+
+.alert {
+    padding: 1rem;
+    margin-bottom: 1rem;
+    border-radius: 3px;
+    border-left: 4px solid;
+}
+
+.alert-success {
+    background-color: #d4edda;
+    color: #155724;
+    border-color: #4CAF50;
+}
+
+.alert-error {
+    background-color: #f8d7da;
+    color: #721c24;
+    border-color: #f5c6cb;
+}
+
+.users-table-container {
+    overflow-x: auto;
+    margin-top: 2rem;
+}
+
+.users-table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: white;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.users-table th {
+    background-color: #4CAF50;
+    color: white;
+    padding: 1rem;
+    text-align: left;
+    font-weight: bold;
+}
+
+.users-table td {
+    padding: 1rem;
+    border-bottom: 1px solid #ddd;
+}
+
+.users-table tbody tr:hover {
+    background-color: #f5f5f5;
+}
+
+.role-badge {
+    display: inline-block;
+    padding: 0.4rem 0.8rem;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: bold;
+    color: white;
+}
+
+.role-admin {
+    background-color: #e74c3c;
+}
+
+.role-trainer {
+    background-color: #3498db;
+}
+
+.role-customer {
+    background-color: #95a5a6;
+}
+
+.role-form {
+    display: inline;
+}
+
+.role-form select {
+    padding: 0.5rem;
+    border: 1px solid #ddd;
+    border-radius: 3px;
+    cursor: pointer;
+    font-size: 0.9rem;
+}
+
+/* Home Page Sections */
+.courses-section,
+.staff-section,
+.hours-section,
+.offers-section {
+    margin-bottom: 3rem;
+}
+
+/* Staff Section */
+.staff-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 2rem;
+    margin-top: 2rem;
+}
+
+.staff-member {
+    background-color: white;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    text-align: center;
+}
+
+.staff-member:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 16px rgba(0,0,0,0.15);
+}
+
+.staff-photo {
+    width: 100%;
+    height: auto;
+    display: block;
+    object-fit: cover;
+}
+
+.staff-member h3 {
+    color: #4CAF50;
+    margin: 1rem 1rem 0.5rem 1rem;
+}
+
+.staff-role {
+    color: #666;
+    font-weight: bold;
+    margin: 0 1rem 0.5rem 1rem;
+    font-size: 0.95rem;
+}
+
+.staff-bio {
+    color: #555;
+    margin: 0.5rem 1rem 1.5rem 1rem;
+    font-size: 0.9rem;
+    line-height: 1.5;
+}
+
+/* Opening Hours Section */
+.hours-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 2rem;
+    margin-top: 2rem;
+}
+
+.hours-column {
+    background-color: white;
+    padding: 1.5rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    border-left: 4px solid #4CAF50;
+}
+
+.hours-column h3 {
+    color: #4CAF50;
+    margin-top: 0;
+}
+
+.hours-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.75rem 0;
+    border-bottom: 1px solid #eee;
+}
+
+.hours-item:last-child {
+    border-bottom: none;
+}
+
+.hours-item .day {
+    font-weight: bold;
+    color: #333;
+}
+
+.hours-item .time {
+    color: #4CAF50;
+    font-weight: bold;
+}
+
+/* Offers Section */
+.offers-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    margin-top: 2rem;
+}
+
+.offer-card {
+    background: linear-gradient(135deg, #f5f5f5 0%, #ffffff 100%);
+    border-radius: 8px;
+    padding: 2rem;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    position: relative;
+    border: 2px solid #f0f0f0;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.offer-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 16px rgba(0,0,0,0.15);
+    border-color: #4CAF50;
+}
+
+.offer-badge {
+    position: absolute;
+    top: -15px;
+    left: 20px;
+    background-color: #4CAF50;
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    font-weight: bold;
+    font-size: 0.85rem;
+}
+
+.offer-card h3 {
+    color: #333;
+    margin-top: 1rem;
+    margin-bottom: 0.5rem;
+}
+
+.offer-card p {
+    color: #666;
+    margin: 0.5rem 0;
+    line-height: 1.5;
+}
+
+.offer-validity {
+    color: #999;
+    font-size: 0.9rem;
+    margin-top: 1rem !important;
+}
+
+.offer-card button {
+    width: 100%;
+    margin-top: 1.5rem;
+    padding: 0.75rem;
+}
+
+/* Admin Panel Styles */
+.dashboard-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+    margin: 2rem 0;
+}
+
+.stat-card {
+    background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
+    color: white;
+    padding: 2rem;
+    border-radius: 8px;
+    text-align: center;
+    box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3);
+}
+
+.stat-card h3 {
+    font-size: 2.5rem;
+    margin: 0 0 0.5rem 0;
+    color: white;
+}
+
+.stat-card p {
+    font-size: 1rem;
+    margin: 0;
+    opacity: 0.9;
+}
+
+.stat-link {
+    display: inline-block;
+    margin-top: 1rem;
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+    transition: opacity 0.3s;
+}
+
+.stat-link:hover {
+    opacity: 0.8;
+}
+
+.admin-menu {
+    background-color: white;
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    margin-top: 2rem;
+}
+
+.admin-menu h3 {
+    color: #4CAF50;
+    margin-top: 0;
+}
+
+.admin-menu ul {
+    list-style: none;
+    padding: 0;
+}
+
+.admin-menu li {
+    padding: 0.75rem 0;
+    border-bottom: 1px solid #eee;
+}
+
+.admin-menu li:last-child {
+    border-bottom: none;
+}
+
+.admin-menu a {
+    color: #333;
+    text-decoration: none;
+    display: block;
+    padding: 0.5rem 0;
+    transition: color 0.3s;
+}
+
+.admin-menu a:hover {
+    color: #4CAF50;
+}
+
+.admin-form {
+    max-width: 600px;
+    background-color: white;
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.admin-form label {
+    display: block;
+    margin-top: 1rem;
+    font-weight: bold;
+    color: #333;
+}
+
+.admin-form input,
+.admin-form textarea {
+    width: 100%;
+    padding: 0.75rem;
+    margin-top: 0.5rem;
+    border: 1px solid #ddd;
+    border-radius: 3px;
+    box-sizing: border-box;
+    font-size: 1rem;
+}
+
+.admin-form textarea {
+    height: 120px;
+    resize: vertical;
+}
+
+.form-actions {
+    margin-top: 2rem;
+    display: flex;
+    gap: 1rem;
+}
+
+.form-actions button,
+.form-actions a button {
+    flex: 1;
+    padding: 0.75rem;
+    font-size: 1rem;
+}
+
+.btn-primary {
+    background-color: #4CAF50;
+    color: white;
+}
+
+.btn-primary:hover {
+    background-color: #45a049;
+}
+
+.btn-secondary {
+    background-color: #666;
+    color: white;
+}
+
+.btn-secondary:hover {
+    background-color: #555;
+}
+
+.btn-edit {
+    background-color: #3498db;
+    color: white;
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+    font-size: 0.9rem;
+}
+
+.btn-edit:hover {
+    background-color: #2980b9;
+}
+
+.btn-delete {
+    background-color: #e74c3c;
+    color: white;
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+    font-size: 0.9rem;
+}
+
+.btn-delete:hover {
+    background-color: #c0392b;
+}
+
+.admin-table-container {
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    overflow: hidden;
+}
+
+.admin-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.admin-table th {
+    background-color: #4CAF50;
+    color: white;
+    padding: 1rem;
+    text-align: left;
+    font-weight: bold;
+}
+
+.admin-table td {
+    padding: 1rem;
+    border-bottom: 1px solid #eee;
+}
+
+.admin-table tbody tr:hover {
+    background-color: #f9f9f9;
+}
+
+.admin-table td {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+}
+
+.inline-form {
+    display: inline;
+}
+
+.staff-admin-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 2rem;
+    margin-top: 2rem;
+}
+
+.staff-admin-card {
+    background-color: white;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.staff-admin-photo {
+    width: 100%;
+    height: 250px;
+    object-fit: cover;
+}
+
+.staff-admin-card h3 {
+    color: #4CAF50;
+    margin: 1rem;
+    margin-bottom: 0.5rem;
+}
+
+.staff-admin-card .staff-role {
+    color: #666;
+    margin: 0 1rem;
+    font-weight: bold;
+}
+
+.staff-admin-card .staff-bio {
+    color: #777;
+    margin: 0.5rem 1rem;
+    font-size: 0.9rem;
+}
+
+.staff-actions {
+    padding: 1rem;
+    display: flex;
+    gap: 0.5rem;
+}
+
+.staff-actions button,
+.staff-actions a {
+    flex: 1;
+    text-decoration: none;
+}
+
+.hours-admin-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+    margin-top: 2rem;
+}
+
+.hours-admin-card {
+    background-color: white;
+    padding: 1.5rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    border-left: 4px solid #4CAF50;
+}
+
+.hours-admin-card h3 {
+    color: #4CAF50;
+    margin-top: 0;
+}
+
+.hours-admin-card p {
+    color: #666;
+    margin: 0.5rem 0;
+}
+
+.hours-admin-card button {
+    margin-top: 1rem;
+    width: 100%;
+}
+
+.course-overview-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.course-preview {
+    background-color: white;
+    padding: 1rem;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    border: 1px solid #ddd;
+}
+
+.course-preview h3 {
+    color: #4CAF50;
+    margin-top: 0;
+}
+
+.plans-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1rem;
+}
+
+.plan {
+    background-color: white;
+    padding: 1.5rem;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    text-align: center;
+    border: 2px solid #ddd;
+}
+
+.plan h3 {
+    color: #4CAF50;
+    margin-top: 0;
+}
+
+.plan .price {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #333;
+    margin: 1rem 0;
+}
+
+.plan ul {
+    list-style-type: none;
+    padding: 0;
+    text-align: left;
+}
+
+.plan li {
+    padding: 0.25rem 0;
+}
+
+.plan button {
+    margin-top: 1rem;
+}
+
+.plan.premium {
+    border-color: #4CAF50;
+    background-color: #f9f9f9;
+}
+
+.plan.premium h3 {
+    color: #2E7D32;
+}
+
+/* Carousel Styles */
+.carousel-section {
+    margin-bottom: 3rem;
+}
+
+.carousel-container {
+    position: relative;
+    width: 100%;
+    max-width: 100%;
+    margin: 0 auto;
+    background-color: #000;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.carousel-slide {
+    display: none;
+    position: relative;
+    width: 100%;
+}
+
+.carousel-slide.active {
+    display: block;
+}
+
+.carousel-image {
+    width: 100%;
+    height: 500px;
+    object-fit: cover;
+}
+
+.carousel-content {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.8) 0%, rgba(0, 0, 0, 0.4) 50%, rgba(0, 0, 0, 0) 100%);
+    color: white;
+    padding: 2rem;
+    text-align: center;
+}
+
+.carousel-content h2 {
+    margin: 0 0 0.5rem 0;
+    font-size: 2.5rem;
+    color: white;
+}
+
+.carousel-content p {
+    margin: 0.5rem 0 1.5rem 0;
+    font-size: 1.1rem;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.carousel-link {
+    display: inline-block;
+    background-color: #4CAF50;
+    color: white;
+    text-decoration: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: 3px;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+}
+
+.carousel-link:hover {
+    background-color: #45a049;
+}
+
+.carousel-button {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: rgba(0, 0, 0, 0.5);
+    color: white;
+    border: none;
+    font-size: 1.5rem;
+    padding: 1rem;
+    cursor: pointer;
+    z-index: 10;
+    border-radius: 3px;
+    transition: background-color 0.3s ease;
+}
+
+.carousel-button:hover {
+    background-color: rgba(0, 0, 0, 0.8);
+}
+
+.carousel-button.prev {
+    left: 1rem;
+}
+
+.carousel-button.next {
+    right: 1rem;
+}
+
+.carousel-indicators {
+    text-align: center;
+    padding: 1rem;
+    background-color: #f4f4f4;
+}
+
+.dot {
+    height: 12px;
+    width: 12px;
+    margin: 0 0.5rem;
+    background-color: #bbb;
+    border-radius: 50%;
+    display: inline-block;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.dot.active {
+    background-color: #4CAF50;
+}
+
+.dot:hover {
+    background-color: #999;
+}
+
+.fade {
+    animation: fade 0.5s ease-in-out;
+}
+
+@keyframes fade {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+/* Membership Section */
+.membership-section {
+    margin-bottom: 3rem;
+}
+
+.membership-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    margin-top: 2rem;
+}
+
+.membership-card {
+    background: white;
+    border-radius: 8px;
+    padding: 2rem;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    border: 2px solid #e0e0e0;
+    position: relative;
+    text-align: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+    display: flex;
+    flex-direction: column;
+}
+
+.membership-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+    border-color: #4CAF50;
+}
+
+.membership-card h3 {
+    color: #4CAF50;
+    font-size: 1.5rem;
+    margin: 1rem 0 0 0;
+}
+
+.membership-card .price {
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: #333;
+    margin: 1.5rem 0;
+}
+
+.membership-card .price-period {
+    font-size: 1rem;
+    font-weight: normal;
+    color: #666;
+}
+
+.features-list {
+    list-style: none;
+    padding: 0;
+    margin: 2rem 0;
+    text-align: left;
+    flex-grow: 1;
+}
+
+.features-list li {
+    padding: 0.75rem 0;
+    color: #555;
+    border-bottom: 1px solid #f0f0f0;
+    font-size: 0.95rem;
+}
+
+.features-list li:last-child {
+    border-bottom: none;
+}
+
+.membership-card button {
+    width: 100%;
+    padding: 0.75rem;
+    margin-top: auto;
+    font-weight: bold;
+}
+
+.pro-plan {
+    border-color: #4CAF50;
+    background: linear-gradient(135deg, #f9fff7 0%, #ffffff 100%);
+    transform: scale(1.05);
+}
+
+.pro-plan:hover {
+    transform: scale(1.05) translateY(-5px);
+}
+
+.popular-badge {
+    position: absolute;
+    top: -15px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #4CAF50;
+    color: white;
+    padding: 0.4rem 1.2rem;
+    border-radius: 20px;
+    font-weight: bold;
+    font-size: 0.75rem;
+    letter-spacing: 0.5px;
+}

@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block title %}Edit Staff Member - GymE{% endblock %}
+
+{% block header_title %}Edit Staff Member{% endblock %}
+{% block header_subtitle %}Update staff details{% endblock %}
+
+{% block content %}
+<section id="edit-staff">
+    <h2>Edit Staff Member</h2>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="alert alert-{{ category }}">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
+    <form method="POST" class="admin-form">
+        <label for="name">Staff Name:</label>
+        <input type="text" id="name" name="name" value="{{ staff.name }}" required>
+
+        <label for="role">Role/Title:</label>
+        <input type="text" id="role" name="role" value="{{ staff.role }}" required>
+
+        <label for="bio">Biography:</label>
+        <textarea id="bio" name="bio" required>{{ staff.bio }}</textarea>
+
+        <label for="photo_url">Photo URL:</label>
+        <input type="url" id="photo_url" name="photo_url" value="{{ staff.photo_url }}" required>
+
+        <div style="margin: 1.5rem 0;">
+            <p><strong>Current Photo Preview:</strong></p>
+            <img src="{{ staff.photo_url }}" alt="{{ staff.name }}" style="max-width: 200px; border-radius: 5px;">
+        </div>
+
+        <div class="form-actions">
+            <button type="submit" class="btn-primary">Update Staff Member</button>
+            <a href="{{ url_for('admin_staff') }}"><button type="button" class="btn-secondary">Cancel</button></a>
+        </div>
+    </form>
+</section>
+{% endblock %}

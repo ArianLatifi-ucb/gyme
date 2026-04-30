@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+
+{% block title %}Available Courses - GymE{% endblock %}
+
+{% block header_title %}GymE - Available Courses{% endblock %}
+{% block header_subtitle %}Explore our fitness classes and activities{% endblock %}
+
+{% block content %}
+<section id="courses">
+    <h2>Available Courses</h2>
+    <div class="course-list">
+        <div class="course">
+            <img src="https://fastly.picsum.photos/id/10/400/300" alt="Yoga Basics" class="course-image">
+            <div class="course-content">
+                <h3>Yoga Basics</h3>
+                <p>A beginner-friendly yoga class focusing on relaxation and flexibility.</p>
+                <p><strong>Duration:</strong> 60 minutes</p>
+                <p><strong>Schedule:</strong> Mondays and Wednesdays, 7:00 AM</p>
+                <p><strong>Instructor:</strong> Sarah Johnson</p>
+                <button onclick="signUp('Yoga Basics')">Sign Up</button>
+            </div>
+        </div>
+
+        <div class="course">
+            <img src="https://fastly.picsum.photos/id/11/400/300" alt="HIIT Training" class="course-image">
+            <div class="course-content">
+                <h3>HIIT Training</h3>
+                <p>High-Intensity Interval Training for maximum calorie burn and fitness improvement.</p>
+                <p><strong>Duration:</strong> 45 minutes</p>
+                <p><strong>Schedule:</strong> Tuesdays and Thursdays, 6:00 PM</p>
+                <p><strong>Instructor:</strong> Mike Chen</p>
+                <button onclick="signUp('HIIT Training')">Sign Up</button>
+            </div>
+        </div>
+
+        <div class="course">
+            <img src="https://fastly.picsum.photos/id/12/400/300" alt="Strength Training" class="course-image">
+            <div class="course-content">
+                <h3>Strength Training</h3>
+                <p>Build muscle and strength with guided weight training sessions.</p>
+                <p><strong>Duration:</strong> 90 minutes</p>
+                <p><strong>Schedule:</strong> Fridays, 5:00 PM</p>
+                <p><strong>Instructor:</strong> Alex Rodriguez</p>
+                <button onclick="signUp('Strength Training')">Sign Up</button>
+            </div>
+        </div>
+
+        <div class="course">
+            <img src="https://fastly.picsum.photos/id/13/400/300" alt="Pilates Core" class="course-image">
+            <div class="course-content">
+                <h3>Pilates Core</h3>
+                <p>Focus on core strength and stability with Pilates exercises.</p>
+                <p><strong>Duration:</strong> 50 minutes</p>
+                <p><strong>Schedule:</strong> Saturdays, 10:00 AM</p>
+                <p><strong>Instructor:</strong> Emma Davis</p>
+                <button onclick="signUp('Pilates Core')">Sign Up</button>
+            </div>
+        </div>
+
+        <div class="course">
+            <img src="https://fastly.picsum.photos/id/14/400/300" alt="Zumba Dance" class="course-image">
+            <div class="course-content">
+                <h3>Zumba Dance</h3>
+                <p>Fun and energetic dance workout combining Latin rhythms with easy-to-follow moves.</p>
+                <p><strong>Duration:</strong> 60 minutes</p>
+                <p><strong>Schedule:</strong> Sundays, 11:00 AM</p>
+                <p><strong>Instructor:</strong> Carlos Martinez</p>
+                <button onclick="signUp('Zumba Dance')">Sign Up</button>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

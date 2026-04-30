@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% block title %}Manage Opening Hours - GymE{% endblock %}
+
+{% block header_title %}Opening Hours Management{% endblock %}
+{% block header_subtitle %}Update your gym's opening times{% endblock %}
+
+{% block content %}
+<section id="hours-management">
+    <h2>Manage Opening Hours</h2>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="alert alert-{{ category }}">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
+    {% if hours %}
+        <div class="hours-admin-container">
+            {% for h in hours %}
+                <div class="hours-admin-card">
+                    <h3>{{ h.day }}</h3>
+                    <p><strong>Opening Time:</strong> {{ h.opening_time }}</p>
+                    <p><strong>Closing Time:</strong> {{ h.closing_time }}</p>
+                    <a href="{{ url_for('admin_edit_hours', hours_id=h.id) }}">
+                        <button class="btn-edit">Edit</button>
+                    </a>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p>No opening hours configured. Please contact support.</p>
+    {% endif %}
+</section>
+{% endblock %}

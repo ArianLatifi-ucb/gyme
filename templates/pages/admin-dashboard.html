@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+
+{% block title %}Admin Dashboard - GymE{% endblock %}
+
+{% block header_title %}Admin Dashboard{% endblock %}
+{% block header_subtitle %}Manage your gym operations{% endblock %}
+
+{% block content %}
+<section id="admin-dashboard">
+    <h2>Welcome to Admin Panel</h2>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="alert alert-{{ category }}">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
+    <div class="dashboard-stats">
+        <div class="stat-card">
+            <h3>{{ total_users }}</h3>
+            <p>Total Users</p>
+            <a href="{{ url_for('users') }}" class="stat-link">Manage Users →</a>
+        </div>
+
+        <div class="stat-card">
+            <h3>{{ total_courses }}</h3>
+            <p>Total Courses</p>
+            <a href="{{ url_for('admin_courses') }}" class="stat-link">Manage Courses →</a>
+        </div>
+
+        <div class="stat-card">
+            <h3>{{ total_staff }}</h3>
+            <p>Staff Members</p>
+            <a href="{{ url_for('admin_staff') }}" class="stat-link">Manage Staff →</a>
+        </div>
+
+        <div class="stat-card">
+            <h3>Hours</h3>
+            <p>Opening Times</p>
+            <a href="{{ url_for('admin_hours') }}" class="stat-link">Manage Hours →</a>
+        </div>
+    </div>
+
+    <div class="admin-menu">
+        <h3>Quick Actions</h3>
+        <ul>
+            <li><a href="{{ url_for('users') }}"> Manage Users</a></li>
+            <li><a href="{{ url_for('admin_courses') }}"> Manage Courses</a></li>
+            <li><a href="{{ url_for('admin_add_course') }}"> Add New Course</a></li>
+            <li><a href="{{ url_for('admin_staff') }}"> Manage Staff</a></li>
+            <li><a href="{{ url_for('admin_add_staff') }}"> Add New Staff Member</a></li>
+            <li><a href="{{ url_for('admin_hours') }}"> Manage Opening Hours</a></li>
+        </ul>
+    </div>
+</section>
+{% endblock %}

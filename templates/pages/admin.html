@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block title %}Admin Panel - GymE{% endblock %}
+
+{% block header_title %}GymE - Admin Panel{% endblock %}
+{% block header_subtitle %}Manage courses and gym operations{% endblock %}
+
+{% block content %}
+<section id="manage-courses">
+    <h2>Manage Courses</h2>
+    <p>Add, edit, or remove courses from the system.</p>
+
+    <form id="course-form">
+        <h3>Add/Edit Course</h3>
+        <label for="course-name">Course Name:</label>
+        <input type="text" id="course-name" required>
+
+        <label for="course-description">Description:</label>
+        <textarea id="course-description" required></textarea>
+
+        <label for="course-duration">Duration (minutes):</label>
+        <input type="number" id="course-duration" required>
+
+        <label for="course-schedule">Schedule:</label>
+        <input type="text" id="course-schedule" placeholder="e.g., Mondays and Wednesdays, 7:00 AM" required>
+
+        <label for="course-instructor">Instructor:</label>
+        <input type="text" id="course-instructor" required>
+
+        <button type="submit">Save Course</button>
+        <button type="button" onclick="clearForm()">Clear</button>
+    </form>
+
+    <h3>Current Courses</h3>
+    <div id="current-courses">
+        <!-- Courses will be listed here -->
+    </div>
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/admin.js') }}"></script>
+{% endblock %}

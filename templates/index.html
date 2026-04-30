@@ -1,0 +1,190 @@
+{% extends "base.html" %}
+
+{% block title %}GymE - Gym Management System{% endblock %}
+
+{% block content %}
+<!-- Carousel Section -->
+<section class="carousel-section">
+    <div class="carousel-container">
+        <!-- Slide 1 -->
+        <div class="carousel-slide fade">
+            <img src="/static/images/carousel-1.jpg" alt="Carousel Slide 1" class="carousel-image">
+            <div class="carousel-content">
+                <h2>Transform Your Body</h2>
+                <p>Start your fitness journey with our expert trainers and state-of-the-art equipment</p>
+                <a href="/courses" class="carousel-link">Learn More</a>
+            </div>
+        </div>
+
+        <!-- Slide 2 -->
+        <div class="carousel-slide fade">
+            <img src="/static/images/carousel-2.jpg" alt="Carousel Slide 2" class="carousel-image">
+            <div class="carousel-content">
+                <h2>Personalized Training</h2>
+                <p>Get custom workout plans designed specifically for your goals and fitness level</p>
+                <a href="/courses" class="carousel-link">Learn More</a>
+            </div>
+        </div>
+
+        <!-- Slide 3 -->
+        <div class="carousel-slide fade">
+            <img src="/static/images/carousel-3.jpg" alt="Carousel Slide 3" class="carousel-image">
+            <div class="carousel-content">
+                <h2>Join Our Community</h2>
+                <p>Be part of a supportive fitness community that motivates and inspires you daily</p>
+                <a href="/courses" class="carousel-link">Learn More</a>
+            </div>
+        </div>
+
+        <!-- Previous/Next buttons -->
+        <button class="carousel-button prev" onclick="changeSlide(-1)">&#10094;</button>
+        <button class="carousel-button next" onclick="changeSlide(1)">&#10095;</button>
+    </div>
+
+    <!-- Carousel indicators/dots -->
+    <div class="carousel-indicators">
+        <span class="dot" onclick="currentSlide(1)"></span>
+        <span class="dot" onclick="currentSlide(2)"></span>
+        <span class="dot" onclick="currentSlide(3)"></span>
+    </div>
+</section>
+
+<!-- Membership Plans Section -->
+<section id="membership" class="membership-section">
+    <h2>Membership Plans</h2>
+    <p>Choose the perfect plan for your fitness goals</p>
+    <div class="membership-grid">
+        <!-- Basic Plan -->
+        <div class="membership-card">
+            <h3>Basic</h3>
+            <div class="price">£18<span class="price-period">/month</span></div>
+            <ul class="features-list">
+                <li>✓ Limited access hours</li>
+                <li>✓ Book classes 8 days in advance</li>
+            </ul>
+            <button onclick="joinMembership('Basic')">Join Now</button>
+        </div>
+
+        <!-- Pro Plan -->
+        <div class="membership-card pro-plan">
+            <div class="popular-badge">POPULAR</div>
+            <h3>Pro</h3>
+            <div class="price">£25<span class="price-period">/month</span></div>
+            <ul class="features-list">
+                <li>✓ 24 hour access</li>
+                <li>✓ Bring guests 4 times a month</li>
+                <li>✓ Dedicated locker</li>
+            </ul>
+            <button onclick="joinMembership('Pro')">Join Now</button>
+        </div>
+
+        <!-- Pro Plus Plan -->
+        <div class="membership-card">
+            <h3>Pro Plus</h3>
+            <div class="price">£39<span class="price-period">/month</span></div>
+            <ul class="features-list">
+                <li>✓ 24 hour access</li>
+                <li>✓ Bring guests 6 times a month</li>
+                <li>✓ Dedicated locker</li>
+                <li>✓ Infinite flavoured water</li>
+                <li>✓ 50% discount on all courses</li>
+            </ul>
+            <button onclick="joinMembership('Pro Plus')">Join Now</button>
+        </div>
+    </div>
+</section>
+
+<!-- Courses Section -->
+<section id="courses" class="courses-section">
+    <h2>Our Courses</h2>
+    <p>Explore our diverse range of fitness classes designed for all levels</p>
+    <div class="course-list">
+        {% for course in courses %}
+            <div class="course">
+                {% if course.image_url %}
+                    <img src="{{ course.image_url }}" alt="{{ course.name }}" class="course-image">
+                {% endif %}
+                <div class="course-content">
+                    <h3>{{ course.name }}</h3>
+                    <p>{{ course.description }}</p>
+                    <p><strong>Duration:</strong> {{ course.duration }} minutes</p>
+                    <p><strong>Schedule:</strong> {{ course.schedule }}</p>
+                    <p><strong>Instructor:</strong> {{ course.instructor }}</p>
+                    <button onclick="signUp('{{ course.name }}')">Sign Up</button>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+    <div style="text-align: center; margin-top: 2rem;">
+        <a href="/courses"><button>View All Courses</button></a>
+    </div>
+</section>
+
+<!-- Our Staff Section -->
+<section id="staff" class="staff-section">
+    <h2>Meet Our Team</h2>
+    <p>Meet the experienced professionals dedicated to your fitness journey</p>
+    <div class="staff-grid">
+        {% for member in staff %}
+            <div class="staff-member">
+                <img src="{{ member.photo_url }}" alt="{{ member.name }}" class="staff-photo">
+                <h3>{{ member.name }}</h3>
+                <p class="staff-role">{{ member.role }}</p>
+                <p class="staff-bio">{{ member.bio }}</p>
+            </div>
+        {% endfor %}
+    </div>
+</section>
+
+<!-- Opening Hours Section -->
+<section id="hours" class="hours-section">
+    <h2>Opening Hours</h2>
+    <p>We're here for you throughout the week</p>
+    <div class="hours-container">
+        {% for h in hours %}
+            <div class="hours-column">
+                <h3>{{ h.day }}</h3>
+                <div class="hours-item">
+                    <span class="day">{{ h.day }}</span>
+                    <span class="time">{{ h.opening_time }} - {{ h.closing_time }}</span>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</section>
+
+<!-- Offers Section -->
+<section id="offers" class="offers-section">
+    <h2>Special Offers</h2>
+    <p>Limited time deals to help you start your fitness journey</p>
+    <div class="offers-grid">
+        <div class="offer-card">
+            <div class="offer-badge">20% OFF</div>
+            <h3>New Member Special</h3>
+            <p>Get 20% discount on your first month membership when you sign up today.</p>
+            <p class="offer-validity"><strong>Valid until:</strong> Dec 31, 2026</p>
+            <button onclick="selectPlan('NewMember')">Claim Offer</button>
+        </div>
+
+        <div class="offer-card">
+            <div class="offer-badge">BUY 3 GET 1 FREE</div>
+            <h3>Group Training Sessions</h3>
+            <p>Buy 3 personal training sessions and get the 4th one absolutely free.</p>
+            <p class="offer-validity"><strong>Valid until:</strong> Dec 31, 2026</p>
+            <button onclick="selectPlan('GroupTraining')">Claim Offer</button>
+        </div>
+
+        <div class="offer-card">
+            <div class="offer-badge">FREE</div>
+            <h3>Fitness Assessment</h3>
+            <p>Complete fitness assessment and personalized workout plan for all new members at no cost.</p>
+            <p class="offer-validity"><strong>Valid until:</strong> Dec 31, 2026</p>
+            <button onclick="selectPlan('FitnessAssessment')">Claim Offer</button>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/carousel.js') }}"></script>
+{% endblock %}

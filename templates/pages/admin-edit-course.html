@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block title %}Edit Course - GymE{% endblock %}
+
+{% block header_title %}Edit Course{% endblock %}
+{% block header_subtitle %}Update course details{% endblock %}
+
+{% block content %}
+<section id="edit-course">
+    <h2>Edit Course</h2>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="alert alert-{{ category }}">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
+    <form method="POST" class="admin-form">
+        <label for="name">Course Name:</label>
+        <input type="text" id="name" name="name" value="{{ course.name }}" required>
+
+        <label for="description">Description:</label>
+        <textarea id="description" name="description" required>{{ course.description }}</textarea>
+
+        <label for="duration">Duration (minutes):</label>
+        <input type="number" id="duration" name="duration" value="{{ course.duration }}" required>
+
+        <label for="schedule">Schedule:</label>
+        <input type="text" id="schedule" name="schedule" value="{{ course.schedule }}" required>
+
+        <label for="instructor">Instructor Name:</label>
+        <input type="text" id="instructor" name="instructor" value="{{ course.instructor }}" required>
+
+        <label for="image_url">Image URL (optional):</label>
+        <input type="url" id="image_url" name="image_url" value="{{ course.image_url or '' }}" placeholder="e.g., https://fastly.picsum.photos/id/10/400/300">
+
+        <div class="form-actions">
+            <button type="submit" class="btn-primary">Update Course</button>
+            <a href="{{ url_for('admin_courses') }}"><button type="button" class="btn-secondary">Cancel</button></a>
+        </div>
+    </form>
+</section>
+{% endblock %}

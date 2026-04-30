@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% block title %}Edit Opening Hours - GymE{% endblock %}
+
+{% block header_title %}Edit Opening Hours{% endblock %}
+{% block header_subtitle %}Update hours for {{ hours.day }}{% endblock %}
+
+{% block content %}
+<section id="edit-hours">
+    <h2>Edit Opening Hours</h2>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="alert alert-{{ category }}">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
+    <form method="POST" class="admin-form">
+        <label for="day">Day:</label>
+        <input type="text" id="day" value="{{ hours.day }}" disabled style="background-color: #f5f5f5;">
+
+        <label for="opening_time">Opening Time:</label>
+        <input type="time" id="opening_time" name="opening_time" value="{{ hours.opening_time }}" required>
+
+        <label for="closing_time">Closing Time:</label>
+        <input type="time" id="closing_time" name="closing_time" value="{{ hours.closing_time }}" required>
+
+        <div class="form-actions">
+            <button type="submit" class="btn-primary">Update Hours</button>
+            <a href="{{ url_for('admin_hours') }}"><button type="button" class="btn-secondary">Cancel</button></a>
+        </div>
+    </form>
+</section>
+{% endblock %}

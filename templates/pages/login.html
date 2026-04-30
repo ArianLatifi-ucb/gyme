@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block title %}Login - GymE{% endblock %}
+
+{% block header_title %}GymE - Login{% endblock %}
+{% block header_subtitle %}Access your gym account{% endblock %}
+
+{% block content %}
+<section id="login-section">
+    <h2>Login</h2>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="alert alert-{{ category }}">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
+    <form method="POST" class="login-form">
+        <label for="username">Username:</label>
+        <input type="text" id="username" name="username" placeholder="Enter your username" required>
+
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password" placeholder="Enter your password" required>
+
+        <button type="submit">Login</button>
+    </form>
+
+    <p class="auth-link">Don't have an account? <a href="{{ url_for('register') }}">Sign up here</a></p>
+</section>
+{% endblock %}
