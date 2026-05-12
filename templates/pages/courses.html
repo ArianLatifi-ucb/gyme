@@ -1,76 +1,251 @@
 {% extends "base.html" %}
 
-{% block title %}GymE - Class Calendar{% endblock %}
-{% block header_title %}Class Calendar{% endblock %}
-{% block header_subtitle %}Choose a date, view available sessions and book your place.{% endblock %}
+{# =========================================================
+PAGE METADATA
+========================================================= #}
+
+{% block title %}
+GymE - Class Calendar
+{% endblock %}
+
+{% block header_title %}
+Class Calendar
+{% endblock %}
+
+{% block header_subtitle %}
+Choose a date, view available sessions and reserve your place.
+{% endblock %}
+
 
 {% block content %}
+
+<!-- ======================================================
+     CALENDAR / BOOKING SECTION
+     ====================================================== -->
 <section class="calendar-panel anchor-safe">
+
+    <!-- Top heading and date selector -->
     <div class="section-heading-row">
+
+        <!-- Left side heading content -->
         <div>
-            <p class="eyebrow dark">Live booking schedule</p>
-            <h2>Book Classes by Date</h2>
-            <p>Select a date to see which classes are running. Trainers and admins create these sessions.</p>
+            <p class="eyebrow dark">
+                Live booking schedule
+            </p>
+
+            <h2>
+                Book Classes by Date
+            </h2>
+
+            <p>
+                Select a date to explore available gym sessions.
+                Trainers and admins manage these schedules.
+            </p>
         </div>
-        <form method="GET" action="{{ url_for('courses') }}" class="date-filter-card">
-            <label for="date">Select date</label>
+
+
+        <!-- Date selection form -->
+        <form class="date-filter-card" method="GET" action="{{ url_for('courses') }}">
+
+            <label for="date">
+                Select date
+            </label>
+
+            <!-- Auto submit when date changes -->
             <input type="date" id="date" name="date" value="{{ selected_date }}" onchange="this.form.submit()">
-            <button type="submit">View Schedule</button>
+
+            <button type="submit">
+                View Schedule
+            </button>
+
         </form>
+
     </div>
 
+
+    <!-- ==================================================
+         QUICK DATE CHIPS
+         ================================================== -->
     <div class="date-chip-row">
-        {% for d in all_session_dates[:8] %}
-            <a href="{{ url_for('courses', date=d) }}" class="date-chip {% if d == selected_date %}active{% endif %}">{{ d }}</a>
+
+        {# Display first 8 available session dates #}
+        {% for session_date in all_session_dates[:8] %}
+
+        <a href="{{ url_for('courses', date=session_date) }}"
+            class="date-chip {% if session_date == selected_date %}active{% endif %}">
+            {{ session_date }}
+        </a>
+
         {% endfor %}
+
     </div>
 
+
+    <!-- ==================================================
+         SESSION CARDS
+         ================================================== -->
     <div class="session-grid">
-        {% for s in sessions %}
-        <div class="session-card {% if s.status != 'Open' %}session-closed{% endif %}">
-            <img src="{{ s.course.image_url }}" alt="{{ s.course.name }}">
+
+        {% if sessions %}
+
+        {% for session in sessions %}
+
+        <!-- Add closed styling if class is unavailable -->
+        <div class="session-card {% if session.status != 'Open' %}session-closed{% endif %}">
+
+            <!-- Course image -->
+            <img src="{{ session.course.image_url }}" alt="{{ session.course.name }}">
+
             <div class="session-body">
-                <span class="status-pill">{{ s.status }}</span>
-                <h3>{{ s.course.name }}</h3>
-                <p>{{ s.course.description }}</p>
+
+                <!-- Session status -->
+                <span class="status-pill">
+                    {{ session.status }}
+                </span>
+
+                <!-- Course title -->
+                <h3>
+                    {{ session.course.name }}
+                </h3>
+
+                <!-- Course description -->
+                <p>
+                    {{ session.course.description }}
+                </p>
+
+
+                <!-- Session information -->
                 <div class="session-meta">
-                    <span>📅 {{ s.session_date }}</span>
-                    <span>⏰ {{ s.session_time }}</span>
-                    <span>👤 {{ s.trainer }}</span>
-                    <span>🪑 {{ s.seats_left }} seats left</span>
+
+                    <span>
+                        📅 {{ session.session_date }}
+                    </span>
+
+                    <span>
+                        ⏰ {{ session.session_time }}
+                    </span>
+
+                    <span>
+                        👤 {{ session.trainer }}
+                    </span>
+
+                    <span>
+                        🪑 {{ session.seats_left }} seats left
+                    </span>
+
                 </div>
-                <form method="POST" action="{{ url_for('book_course', course_id=s.course.id) }}">
-                    <input type="hidden" name="session_id" value="{{ s.id }}">
-                    <button type="submit" {% if s.status != 'Open' or s.seats_left <= 0 %}disabled{% endif %}>Book This Class</button>
+
+
+                <!-- Booking form -->
+                <form method="POST" action="{{ url_for('book_course', course_id=session.course.id) }}">
+
+                    <!-- Hidden session identifier -->
+                    <input type="hidden" name="session_id" value="{{ session.id }}">
+
+                    <!-- Disable button if session unavailable -->
+                    <button type="submit" {% if session.status !='Open' or session.seats_left <=0 %} disabled {% endif
+                        %}>
+                        Book This Class
+                    </button>
+
                 </form>
+
             </div>
         </div>
-        {% else %}
-            <div class="empty-state">
-                <h3>No classes on {{ selected_date }}</h3>
-                <p>Choose another date above or check the full class list below.</p>
-            </div>
+
         {% endfor %}
+
+        {% else %}
+
+        <!-- Empty state when no sessions exist -->
+        <div class="empty-state">
+
+            <h3>
+                No classes on {{ selected_date }}
+            </h3>
+
+            <p>
+                Try selecting another available date above.
+            </p>
+
+        </div>
+
+        {% endif %}
+
     </div>
+
 </section>
 
+
+
+<!-- ======================================================
+     ALL COURSES SECTION
+     ====================================================== -->
 <section class="courses-section">
-    <h2>All Courses</h2>
-    <p>These are the main classes available at GymE. Admins and trainers can create schedules from their dashboards.</p>
+
+    <h2>
+        All Courses
+    </h2>
+
+    <p>
+        Browse all available GymE classes below.
+        Trainers and admins can create schedules for each course.
+    </p>
+
+
+    <!-- Course listing -->
     <div class="course-list">
-        {% for course in courses %}
+
+        {% for item in courses %}
+
         <div class="course">
-            <img src="{{ course.image_url }}" alt="{{ course.name }}" class="course-image">
+
+            <!-- Course image -->
+            <img src="{{ item.image_url }}" alt="{{ item.name }}" class="course-image">
+
             <div class="course-content">
-                <h3>{{ course.name }}</h3>
-                <p>{{ course.description }}</p>
-                <p><strong>Duration:</strong> {{ course.duration }} minutes</p>
-                <p><strong>Trainer:</strong> {{ course.instructor }}</p>
-                <p><strong>Capacity:</strong> {{ course.capacity or 12 }} members</p>
-                <a href="{{ url_for('courses') }}?date={{ selected_date }}" class="button-link small">Check Dates</a>
+
+                <!-- Course name -->
+                <h3>
+                    {{ item.name }}
+                </h3>
+
+                <!-- Description -->
+                <p>
+                    {{ item.description }}
+                </p>
+
+                <!-- Duration -->
+                <p>
+                    <strong>Duration:</strong>
+                    {{ item.duration }} minutes
+                </p>
+
+                <!-- Instructor -->
+                <p>
+                    <strong>Trainer:</strong>
+                    {{ item.instructor }}
+                </p>
+
+                <!-- Capacity -->
+                <p>
+                    <strong>Capacity:</strong>
+                    {{ item.capacity or 12 }} members
+                </p>
+
+                <!-- Redirect to schedule -->
+                <a href="{{ url_for('courses') }}?date={{ selected_date }}" class="button-link small">
+                    Check Dates
+                </a>
+
             </div>
+
         </div>
+
         {% endfor %}
+
     </div>
+
 </section>
+
 {% endblock %}
