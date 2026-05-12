@@ -115,7 +115,14 @@ def index():
             flash('Please complete all contact form fields.', 'error')
         return redirect(url_for('index') + '#contact')
 
-    courses = Course.query.all()
+    today = datetime.now().strftime('%Y-%m-%d')
+    courses = (
+        db.session.query(Course)
+        .join(ClassSession, ClassSession.course_id == Course.id)
+        .filter(ClassSession.status == 'Open', ClassSession.session_date >= today)
+        .distinct()
+        .all()
+    )
     staff = Staff.query.all()
     hours = OpeningHours.query.all()
     return render_template('index.html', courses=courses, staff=staff, hours=hours)
@@ -123,13 +130,24 @@ def index():
 
 @app.route('/courses')
 def courses():
-    courses = Course.query.all()
-    selected_date = request.args.get('date') or datetime.now().strftime('%Y-%m-%d')
-    sessions = ClassSession.query.filter_by(session_date=selected_date).order_by(ClassSession.session_time).all()
-    all_session_dates = [row[0] for row in db.session.query(ClassSession.session_date).distinct().order_by(ClassSession.session_date).all()]
+    all_courses = Course.query.order_by(Course.name).all()
+    course_filter = request.args.get('course', '').strip()
+    today = datetime.now().strftime('%Y-%m-%d')
+
+    query = (
+        ClassSession.query
+        .filter(ClassSession.status == 'Open', ClassSession.session_date >= today)
+        .order_by(ClassSession.session_date, ClassSession.session_time)
+    )
+    if course_filter:
+        matched = Course.query.filter_by(name=course_filter).first()
+        if matched:
+            query = query.filter(ClassSession.course_id == matched.id)
+
+    sessions = query.all()
     current_user = get_current_user()
     customer = get_or_create_customer(current_user) if current_user and current_user.role == 'customer' else None
-    return render_template('pages/courses.html', courses=courses, sessions=sessions, selected_date=selected_date, all_session_dates=all_session_dates, customer=customer)
+    return render_template('pages/courses.html', courses=all_courses, sessions=sessions, course_filter=course_filter, customer=customer)
 
 
 @app.route('/login', methods=['GET', 'POST'])

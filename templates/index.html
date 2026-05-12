@@ -83,7 +83,7 @@
 
 <section id="courses" class="courses-section">
     <h2>Our Courses</h2>
-    <p>Explore our diverse range of fitness classes designed for all levels.</p>
+    <p>Explore our upcoming fitness classes. Select a course to view available sessions and book your place.</p>
     <div class="course-list">
         {% for course in courses[:6] %}
             <div class="course">
@@ -92,24 +92,15 @@
                     <h3>{{ course.name }}</h3>
                     <p>{{ course.description }}</p>
                     <p><strong>Duration:</strong> {{ course.duration }} minutes</p>
-                    <p><strong>Schedule:</strong> {{ course.schedule }}</p>
                     <p><strong>Trainer:</strong> {{ course.instructor }}</p>
-                    <form method="POST" action="{{ url_for('book_course', course_id=course.id) }}" class="booking-mini-form">
-                        <label>Choose date</label>
-                        <input type="date" name="booking_date" required>
-                        <label>Choose time</label>
-                        <select name="booking_time" required>
-                            <option value="07:00">07:00</option>
-                            <option value="12:00">12:00</option>
-                            <option value="18:00">18:00</option>
-                            <option value="19:30">19:30</option>
-                        </select>
-                        <button type="submit">Book Class</button>
-                    </form>
+                    <a href="{{ url_for('courses', course=course.name) }}" class="button-link">View Sessions & Book</a>
                 </div>
             </div>
         {% endfor %}
     </div>
+    {% if not courses %}
+        <p class="muted-text">No upcoming sessions scheduled yet. Check back soon.</p>
+    {% endif %}
     <div class="center-action"><a href="/courses"><button>View All Courses</button></a></div>
 </section>
 

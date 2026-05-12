@@ -2662,3 +2662,96 @@ button:disabled { opacity:.45; cursor:not-allowed; }
 .status-cancelled { color: #721c24; font-weight: 600; }
 .form-hint { font-size: 0.85rem; color: #856404; margin-top: 0.25rem; }
 
+/* ── Sessions List (Courses Page) ───────────────────────── */
+.sessions-panel { padding: 2rem; }
+
+.course-filter-card {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    background: #fff;
+    border: 1px solid #dbe7f4;
+    border-radius: 18px;
+    padding: 1.2rem 1.4rem;
+    min-width: 240px;
+    box-shadow: 0 8px 24px rgba(2,12,27,.07);
+}
+.course-filter-card label { font-weight: 700; font-size: 0.88rem; color: #4a5568; }
+.course-filter-card select {
+    padding: 0.65rem 0.9rem;
+    border: 1.5px solid #dbe7f4;
+    border-radius: 10px;
+    font-size: 0.95rem;
+    background: #f8fbff;
+    color: #0f3570;
+}
+.clear-filter {
+    font-size: 0.83rem;
+    color: #0b64c7;
+    text-align: center;
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.session-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.9rem;
+    margin-top: 1.8rem;
+}
+
+.session-row {
+    display: flex;
+    align-items: center;
+    gap: 1.2rem;
+    background: #fff;
+    border: 1px solid #dbe7f4;
+    border-radius: 18px;
+    padding: 1rem 1.2rem;
+    box-shadow: 0 6px 18px rgba(2,12,27,.06);
+    transition: box-shadow 0.2s;
+}
+.session-row:hover { box-shadow: 0 12px 32px rgba(2,12,27,.11); }
+
+.session-row-img {
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+    border-radius: 14px;
+    flex-shrink: 0;
+}
+
+.session-row-info {
+    flex: 1;
+    min-width: 0;
+}
+.session-row-info h3 {
+    margin: 0 0 0.25rem;
+    font-size: 1.05rem;
+    border: none;
+    color: var(--dark);
+}
+.session-row-info p {
+    margin: 0 0 0.5rem;
+    font-size: 0.88rem;
+    color: var(--muted);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.session-book-form { flex-shrink: 0; }
+.session-book-form button {
+    padding: 0.6rem 1.4rem;
+    white-space: nowrap;
+    border-radius: 999px;
+}
+
+@media (max-width: 700px) {
+    .session-row { flex-wrap: wrap; }
+    .session-row-img { width: 60px; height: 60px; }
+    .session-book-form { width: 100%; }
+    .session-book-form button { width: 100%; }
+}
+/* ── end Sessions List ──────────────────────────────────── */
+

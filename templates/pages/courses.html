@@ -1,281 +1,85 @@
 {% extends "base.html" %}
 
-{# =========================================================
-PAGE METADATA
-========================================================= #}
+{% block title %}GymE - Class Schedule{% endblock %}
 
-{% block title %}
-GymE - Class Calendar
-{% endblock %}
-
-{% block header_title %}
-Class Calendar
-{% endblock %}
-
-{% block header_subtitle %}
-Choose a date, view available sessions and reserve your place.
-{% endblock %}
-
+{% block header_title %}Class Schedule{% endblock %}
+{% block header_subtitle %}Browse upcoming sessions and book your place.{% endblock %}
 
 {% block content %}
+<section class="sessions-panel anchor-safe">
 
-<!-- ======================================================
-     CALENDAR / BOOKING SECTION
-     ====================================================== -->
-<section class="calendar-panel anchor-safe">
-
-    <!-- Top heading and date selector -->
     <div class="section-heading-row">
-
-        <!-- Left side heading content -->
         <div>
-            <p class="eyebrow dark">
-                Live booking schedule
-            </p>
-
-            <h2>
-                Book Classes by Date
-            </h2>
-
-            <p>
-                Select a date to explore available gym sessions.
-                Trainers and admins manage these schedules.
-            </p>
+            <p class="eyebrow dark">Live booking schedule</p>
+            <h2>Available Sessions</h2>
+            <p>Upcoming open classes managed by trainers and admins. Use the filter to find a specific course.</p>
         </div>
 
-
-        <!-- Date selection form -->
-        <form class="date-filter-card" method="GET" action="{{ url_for('courses') }}">
-
-            <label for="date">
-                Select date
-            </label>
-
-            <!-- Auto submit when date changes -->
-            <input type="date" id="date" name="date" value="{{ selected_date }}" onchange="this.form.submit()">
-
-            <button type="submit">
-                View Schedule
-            </button>
-
+        <form class="course-filter-card" method="GET" action="{{ url_for('courses') }}">
+            <label for="course">Filter by course</label>
+            <select id="course" name="course" onchange="this.form.submit()">
+                <option value="">All Courses</option>
+                {% for c in courses %}
+                    <option value="{{ c.name }}" {% if c.name == course_filter %}selected{% endif %}>{{ c.name }}</option>
+                {% endfor %}
+            </select>
+            {% if course_filter %}
+                <a href="{{ url_for('courses') }}" class="clear-filter">Clear filter</a>
+            {% endif %}
         </form>
-
     </div>
 
-
-    <!-- ==================================================
-         QUICK DATE CHIPS
-         ================================================== -->
-    <div class="date-chip-row">
-
-        {# Display first 8 available session dates #}
-        {% for session_date in all_session_dates[:8] %}
-
-        <a href="{{ url_for('courses', date=session_date) }}"
-            class="date-chip {% if session_date == selected_date %}active{% endif %}">
-            {{ session_date }}
-        </a>
-
-        {% endfor %}
-
-    </div>
-
-
-    <!-- ==================================================
-         SESSION CARDS
-         ================================================== -->
-    <div class="session-grid">
-
-        {% if sessions %}
-
+    {% if sessions %}
+    <div class="session-list">
         {% for session in sessions %}
+        <div class="session-row">
+            <img src="{{ session.course.image_url }}" alt="{{ session.course.name }}" class="session-row-img">
 
-        <!-- Add closed styling if class is unavailable -->
-        <div class="session-card {% if session.status != 'Open' %}session-closed{% endif %}">
-
-            <!-- Course image -->
-            <img src="{{ session.course.image_url }}" alt="{{ session.course.name }}">
-
-            <div class="session-body">
-
-                <!-- Session status -->
-                <span class="status-pill">
-                    {{ session.status }}
-                </span>
-
-                <!-- Course title -->
-                <h3>
-                    {{ session.course.name }}
-                </h3>
-
-                <!-- Course description -->
-                <p>
-                    {{ session.course.description }}
-                </p>
-
-
-                <!-- Session information -->
+            <div class="session-row-info">
+                <h3>{{ session.course.name }}</h3>
+                <p>{{ session.course.description }}</p>
                 <div class="session-meta">
-
-                    <span>
-                        📅 {{ session.session_date }}
-                    </span>
-
-                    <span>
-                        ⏰ {{ session.session_time }}
-                    </span>
-
-                    <span>
-                        👤 {{ session.trainer }}
-                    </span>
-
-                    <span>
-                        🪑 {{ session.seats_left }} seats left
-                    </span>
-
+                    <span>📅 {{ session.session_date }}</span>
+                    <span>⏰ {{ session.session_time }}</span>
+                    <span>👤 {{ session.trainer }}</span>
+                    <span>🪑 {{ session.seats_left }} seat{{ 's' if session.seats_left != 1 }}</span>
                     {% if session.course.price and session.course.price > 0 %}
                         {% if customer and customer.discount_percent > 0 %}
                             {% set final = session.course.price * (1 - customer.discount_percent / 100) %}
                             <span class="session-price">
-                                💷 £{{ '%.2f' | format(final) }}
-                                <span class="discount-tag">{{ customer.discount_percent | int }}% off</span>
+                                💷 £{{ '%.2f'|format(final) }}
+                                <span class="discount-tag">{{ customer.discount_percent|int }}% off</span>
                             </span>
                         {% else %}
-                            <span class="session-price">💷 £{{ '%.2f' | format(session.course.price) }}</span>
+                            <span class="session-price">💷 £{{ '%.2f'|format(session.course.price) }}</span>
                         {% endif %}
                     {% else %}
                         <span class="session-price free-tag">Free</span>
                     {% endif %}
-
                 </div>
-
-
-                <!-- Booking form -->
-                <form method="POST" action="{{ url_for('book_course', course_id=session.course.id) }}">
-
-                    <!-- Hidden session identifier -->
-                    <input type="hidden" name="session_id" value="{{ session.id }}">
-
-                    <!-- Disable button if session unavailable -->
-                    <button type="submit" {% if session.status !='Open' or session.seats_left <=0 %} disabled {% endif
-                        %}>
-                        Book This Class
-                    </button>
-
-                </form>
-
             </div>
+
+            <form method="POST" action="{{ url_for('book_course', course_id=session.course.id) }}" class="session-book-form">
+                <input type="hidden" name="session_id" value="{{ session.id }}">
+                <button type="submit" {% if session.seats_left <= 0 %}disabled{% endif %}>
+                    {% if session.seats_left <= 0 %}Full{% else %}Book{% endif %}
+                </button>
+            </form>
         </div>
-
         {% endfor %}
+    </div>
 
+    {% else %}
+    <div class="empty-state">
+        {% if course_filter %}
+            <h3>No upcoming sessions for "{{ course_filter }}"</h3>
+            <p><a href="{{ url_for('courses') }}">View all courses</a></p>
         {% else %}
-
-        <!-- Empty state when no sessions exist -->
-        <div class="empty-state">
-
-            <h3>
-                No classes on {{ selected_date }}
-            </h3>
-
-            <p>
-                Try selecting another available date above.
-            </p>
-
-        </div>
-
+            <h3>No sessions scheduled yet</h3>
+            <p>Check back soon or contact us for more information.</p>
         {% endif %}
-
     </div>
+    {% endif %}
 
 </section>
-
-
-
-<!-- ======================================================
-     ALL COURSES SECTION
-     ====================================================== -->
-<section class="courses-section">
-
-    <h2>
-        All Courses
-    </h2>
-
-    <p>
-        Browse all available GymE classes below.
-        Trainers and admins can create schedules for each course.
-    </p>
-
-
-    <!-- Course listing -->
-    <div class="course-list">
-
-        {% for item in courses %}
-
-        <div class="course">
-
-            <!-- Course image -->
-            <img src="{{ item.image_url }}" alt="{{ item.name }}" class="course-image">
-
-            <div class="course-content">
-
-                <!-- Course name -->
-                <h3>
-                    {{ item.name }}
-                </h3>
-
-                <!-- Description -->
-                <p>
-                    {{ item.description }}
-                </p>
-
-                <!-- Duration -->
-                <p>
-                    <strong>Duration:</strong>
-                    {{ item.duration }} minutes
-                </p>
-
-                <!-- Instructor -->
-                <p>
-                    <strong>Trainer:</strong>
-                    {{ item.instructor }}
-                </p>
-
-                <!-- Capacity -->
-                <p>
-                    <strong>Capacity:</strong>
-                    {{ item.capacity or 12 }} members
-                </p>
-
-                <!-- Price -->
-                {% if item.price and item.price > 0 %}
-                    {% if customer and customer.discount_percent > 0 %}
-                        {% set final = item.price * (1 - customer.discount_percent / 100) %}
-                        <p>
-                            <strong>Price:</strong>
-                            £{{ '%.2f' | format(final) }} per session
-                            <span class="discount-tag">{{ customer.discount_percent | int }}% off</span>
-                        </p>
-                    {% else %}
-                        <p><strong>Price:</strong> £{{ '%.2f' | format(item.price) }} per session</p>
-                    {% endif %}
-                {% else %}
-                    <p><strong>Price:</strong> Free</p>
-                {% endif %}
-
-                <!-- Redirect to schedule -->
-                <a href="{{ url_for('courses') }}?date={{ selected_date }}" class="button-link small">
-                    Check Dates
-                </a>
-
-            </div>
-
-        </div>
-
-        {% endfor %}
-
-    </div>
-
-</section>
-
 {% endblock %}
