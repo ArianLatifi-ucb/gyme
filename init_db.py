@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 """Initialize GymE database with demo admin, trainer and member data."""
 
-from app import app, db, ensure_member_columns
+from app import app, db, ensure_columns as ensure_member_columns
 from models import User, Course, ClassSession, Staff, OpeningHours, Booking, Plan, Customer
 
 

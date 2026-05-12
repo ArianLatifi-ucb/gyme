@@ -1,9 +1,8 @@
 {% extends "base.html" %}
 
 {% block title %}User Management - GymE{% endblock %}
-
 {% block header_title %}GymE - User Management{% endblock %}
-{% block header_subtitle %}Manage gym members and staff{% endblock %}
+{% block header_subtitle %}Manage gym members, roles, and customer discounts{% endblock %}
 
 {% block content %}
 <section id="user-management">
@@ -18,7 +17,7 @@
     {% endwith %}
 
     {% if not is_admin %}
-        <div class="alert alert-error">You do not have permission to access this page. Only admins can manage users.</div>
+        <div class="alert alert-error">You do not have permission to access this page.</div>
     {% else %}
         <div class="users-table-container">
             <table class="users-table">
@@ -27,28 +26,57 @@
                         <th>Username</th>
                         <th>Email</th>
                         <th>Role</th>
+                        <th>Balance</th>
+                        <th>Discount</th>
                         <th>Joined</th>
-                        <th>Actions</th>
+                        <th>Change Role</th>
+                        <th>Set Discount</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {% for user in users %}
+                    {% for u in users %}
                         <tr>
-                            <td>{{ user.username }}</td>
-                            <td>{{ user.email }}</td>
+                            <td>{{ u.username }}</td>
+                            <td>{{ u.email }}</td>
                             <td>
-                                <span class="role-badge role-{{ user.role }}">{{ user.role }}</span>
+                                <span class="role-badge role-{{ u.role }}">{{ u.role }}</span>
                             </td>
-                            <td>{{ user.created_at.strftime('%Y-%m-%d') }}</td>
+                            <td>
+                                {% if u.customer %}
+                                    £{{ '%.2f' | format(u.customer.balance or 0) }}
+                                {% else %}
+                                    —
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if u.customer and u.customer.discount_percent %}
+                                    {{ u.customer.discount_percent | int }}%
+                                {% else %}
+                                    0%
+                                {% endif %}
+                            </td>
+                            <td>{{ u.created_at.strftime('%Y-%m-%d') }}</td>
                             <td>
                                 <form method="POST" action="{{ url_for('update_user_role') }}" class="role-form">
-                                    <input type="hidden" name="user_id" value="{{ user.id }}">
+                                    <input type="hidden" name="user_id" value="{{ u.id }}">
                                     <select name="role" onchange="this.form.submit()">
-                                        <option value="customer" {% if user.role == 'customer' %}selected{% endif %}>Customer</option>
-                                        <option value="trainer" {% if user.role == 'trainer' %}selected{% endif %}>Trainer</option>
-                                        <option value="admin" {% if user.role == 'admin' %}selected{% endif %}>Admin</option>
+                                        <option value="customer" {% if u.role == 'customer' %}selected{% endif %}>Customer</option>
+                                        <option value="trainer" {% if u.role == 'trainer' %}selected{% endif %}>Trainer</option>
+                                        <option value="admin" {% if u.role == 'admin' %}selected{% endif %}>Admin</option>
                                     </select>
                                 </form>
+                            </td>
+                            <td>
+                                {% if u.role == 'customer' %}
+                                <form method="POST" action="{{ url_for('set_customer_discount', user_id=u.id) }}" class="discount-form">
+                                    <input type="number" name="discount_percent"
+                                        value="{{ u.customer.discount_percent | int if u.customer else 0 }}"
+                                        min="0" max="100" step="1" class="discount-input">
+                                    <button type="submit" class="btn-edit">Set</button>
+                                </form>
+                                {% else %}
+                                    —
+                                {% endif %}
                             </td>
                         </tr>
                     {% endfor %}
@@ -56,7 +84,7 @@
             </table>
 
             {% if not users %}
-                <p>No users found in the system.</p>
+                <p>No users found.</p>
             {% endif %}
         </div>
     {% endif %}

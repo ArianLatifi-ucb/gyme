@@ -21,13 +21,9 @@
         <a class="brand" href="/"><img src="{{ url_for('static', filename='images/logo.png') }}" alt="GymE" class="nav-logo"><span>GymE</span></a>
         <ul>
             <li><a href="/">Home</a></li>
-            <li><a href="/#membership">Plans</a></li>
             <li><a href="/courses">Courses</a></li>
-            <li><a href="/#equipment">Equipment</a></li>
-            <li><a href="/#staff">Trainers</a></li>
-            <li><a href="/#about">About</a></li>
-            <li><a href="/#contact">Contact</a></li>
-            {% if session.get('username') %}
+            <!-- todo: dashboard should be link to the username in navbar -->
+            {% if session.get('username') %} 
                 {% if session.get('role') == 'admin' %}
                     <li><a href="{{ url_for('admin_dashboard') }}">Dashboard</a></li>
                 {% elif session.get('role') == 'trainer' %}
@@ -61,7 +57,8 @@
         {% block content %}{% endblock %}
     </main>
 
-    <footer>
+    <footer> 
+        <!-- todo: extend the footer. -->
         <p>&copy; 2026 GymE. Agile Gym Management System.</p>
     </footer>
 

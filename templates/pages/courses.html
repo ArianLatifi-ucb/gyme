@@ -133,6 +133,20 @@ Choose a date, view available sessions and reserve your place.
                         🪑 {{ session.seats_left }} seats left
                     </span>
 
+                    {% if session.course.price and session.course.price > 0 %}
+                        {% if customer and customer.discount_percent > 0 %}
+                            {% set final = session.course.price * (1 - customer.discount_percent / 100) %}
+                            <span class="session-price">
+                                💷 £{{ '%.2f' | format(final) }}
+                                <span class="discount-tag">{{ customer.discount_percent | int }}% off</span>
+                            </span>
+                        {% else %}
+                            <span class="session-price">💷 £{{ '%.2f' | format(session.course.price) }}</span>
+                        {% endif %}
+                    {% else %}
+                        <span class="session-price free-tag">Free</span>
+                    {% endif %}
+
                 </div>
 
 
@@ -232,6 +246,22 @@ Choose a date, view available sessions and reserve your place.
                     <strong>Capacity:</strong>
                     {{ item.capacity or 12 }} members
                 </p>
+
+                <!-- Price -->
+                {% if item.price and item.price > 0 %}
+                    {% if customer and customer.discount_percent > 0 %}
+                        {% set final = item.price * (1 - customer.discount_percent / 100) %}
+                        <p>
+                            <strong>Price:</strong>
+                            £{{ '%.2f' | format(final) }} per session
+                            <span class="discount-tag">{{ customer.discount_percent | int }}% off</span>
+                        </p>
+                    {% else %}
+                        <p><strong>Price:</strong> £{{ '%.2f' | format(item.price) }} per session</p>
+                    {% endif %}
+                {% else %}
+                    <p><strong>Price:</strong> Free</p>
+                {% endif %}
 
                 <!-- Redirect to schedule -->
                 <a href="{{ url_for('courses') }}?date={{ selected_date }}" class="button-link small">

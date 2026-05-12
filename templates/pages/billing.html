@@ -1,45 +1,108 @@
 {% extends "base.html" %}
 
-{% block title %}Billing & Membership Payment - GymE{% endblock %}
-{% block header_title %}Secure Membership Billing{% endblock %}
-{% block header_subtitle %}Complete your membership payment using the GymE demo billing system.{% endblock %}
+{% block title %}Billing & Balance - GymE{% endblock %}
+{% block header_title %}Billing & Balance{% endblock %}
+{% block header_subtitle %}Top up your balance, activate a membership plan, and track your payments.{% endblock %}
 
 {% block content %}
-<section class="billing-page-section">
-    <div class="billing-hero-card">
-        <div>
-            <span class="eyebrow-dark">Demo Payment Gateway</span>
-            <h2>Activate Your {{ selected_plan }} Plan</h2>
-            <p>This is a safe assignment demo. It records a payment in the database but does not charge a real bank card.</p>
-        </div>
-        <div class="billing-total-box">
-            <span>Total</span>
-            <strong>£{{ amount }}</strong>
-            <small>/month</small>
-        </div>
-    </div>
 
-    {% with messages = get_flashed_messages(with_categories=true) %}
-        {% if messages %}
-            {% for category, message in messages %}
-                <div class="alert alert-{{ category }}">{{ message }}</div>
-            {% endfor %}
+{% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+        {% for category, message in messages %}
+            <div class="alert alert-{{ category }}">{{ message }}</div>
+        {% endfor %}
+    {% endif %}
+{% endwith %}
+
+<!-- Balance & Membership Status -->
+<section class="billing-status-grid">
+    <div class="billing-stat-card balance-card">
+        <p class="eyebrow dark">Current Balance</p>
+        <h2>£{{ '%.2f' | format(customer.balance or 0) }}</h2>
+        <p>Available to spend on class bookings</p>
+    </div>
+    <div class="billing-stat-card plan-card">
+        <p class="eyebrow dark">Membership Plan</p>
+        <h2>{{ user.membership_plan or 'Not selected' }}</h2>
+        {% if customer.membership_end %}
+            {% if customer.membership_end > now %}
+                <p class="success-text">Active — expires {{ customer.membership_end.strftime('%d %b %Y') }}</p>
+            {% else %}
+                <p style="color:#e74c3c;">Expired {{ customer.membership_end.strftime('%d %b %Y') }}</p>
+            {% endif %}
+        {% else %}
+            <p>No active membership</p>
         {% endif %}
-    {% endwith %}
+    </div>
+    {% if customer.discount_percent and customer.discount_percent > 0 %}
+    <div class="billing-stat-card discount-card">
+        <p class="eyebrow dark">Your Discount</p>
+        <h2>{{ customer.discount_percent | int }}% off</h2>
+        <p>Applied automatically on all class bookings</p>
+    </div>
+    {% endif %}
+</section>
+
+<!-- Activate / Renew Membership Plan -->
+<section>
+    <h2>Activate or Renew Membership</h2>
+    <p>Selecting a plan deducts the plan price from your balance and activates your membership for 30 days. Top up first if needed.</p>
+
+    <div class="billing-plans-grid">
+        {% for plan in allowed_plans %}
+        {% set price = plan_prices[plan] %}
+        <div class="membership-card {% if plan == 'Pro' %}pro-plan{% endif %}">
+            {% if plan == 'Pro' %}<span class="popular-badge">MOST POPULAR</span>{% endif %}
+            <h3>{{ plan }}</h3>
+            <div class="price">£{{ price }}<span class="price-period">/month</span></div>
+            <ul class="features-list">
+                {% if plan == 'Basic' %}
+                    <li>✓ Access to all standard classes</li>
+                    <li>✓ 30-day membership</li>
+                    <li>✓ Online booking</li>
+                {% elif plan == 'Pro' %}
+                    <li>✓ Access to all classes</li>
+                    <li>✓ 30-day membership</li>
+                    <li>✓ Priority booking</li>
+                    <li>✓ Trainer consultation</li>
+                {% else %}
+                    <li>✓ Unlimited class access</li>
+                    <li>✓ 30-day membership</li>
+                    <li>✓ Personal training session</li>
+                    <li>✓ Nutrition guidance</li>
+                    <li>✓ Guest passes</li>
+                {% endif %}
+            </ul>
+            <form method="POST">
+                <input type="hidden" name="action_type" value="plan">
+                <input type="hidden" name="plan" value="{{ plan }}">
+                <input type="hidden" name="billing_email" value="{{ user.email }}">
+                <input type="hidden" name="cardholder_name" value="{{ user.full_name or user.username }}">
+                <input type="hidden" name="payment_method" value="Demo Card">
+                <button type="submit">Pay £{{ price }} &amp; Activate</button>
+            </form>
+        </div>
+        {% endfor %}
+    </div>
+</section>
+
+<!-- Custom Top-Up -->
+<section class="billing-topup-section">
+    <h2>Top Up Balance</h2>
+    <p>Add any amount to your balance without changing your membership plan.</p>
 
     <div class="billing-grid">
         <form method="POST" class="billing-form-card">
-            <h3>Payment Details</h3>
-            <input type="hidden" name="plan" value="{{ selected_plan }}">
+            <input type="hidden" name="action_type" value="topup">
 
-            <label>Selected Plan</label>
-            <input type="text" value="{{ selected_plan }} Membership - £{{ amount }}/month" readonly>
+            <label>Amount to Add (£)</label>
+            <input type="number" name="topup_amount" placeholder="e.g. 20" min="1" step="0.01" required>
 
             <label>Billing Email</label>
             <input type="email" name="billing_email" value="{{ user.email }}" required>
 
             <label>Cardholder Name</label>
-            <input type="text" name="cardholder_name" placeholder="Example: Afsar Ahmed" required>
+            <input type="text" name="cardholder_name" value="{{ user.full_name or user.username }}" required>
 
             <label>Demo Card Number</label>
             <input type="text" placeholder="4242 4242 4242 4242" maxlength="19" required>
@@ -56,26 +119,32 @@
             </div>
 
             <label>Payment Method</label>
-            <select name="payment_method" required>
+            <select name="payment_method">
                 <option value="Demo Card">Demo Card</option>
                 <option value="Bank Transfer Demo">Bank Transfer Demo</option>
                 <option value="Apple Pay Demo">Apple Pay Demo</option>
             </select>
 
-            <button type="submit" class="pay-button">Confirm Demo Payment</button>
+            <button type="submit" class="pay-button">Top Up Balance</button>
+            <p class="safe-note">No real money is charged. This is a demo system.</p>
         </form>
 
         <div class="billing-summary-card">
-            <h3>Membership Summary</h3>
+            <h3>Account Summary</h3>
             <ul>
-                <li><strong>Member:</strong> {{ user.username }}</li>
+                <li><strong>Member:</strong> {{ user.full_name or user.username }}</li>
                 <li><strong>Email:</strong> {{ user.email }}</li>
-                <li><strong>Plan:</strong> {{ selected_plan }}</li>
-                <li><strong>Monthly Price:</strong> £{{ amount }}</li>
-                <li><strong>Status after payment:</strong> Active</li>
+                <li><strong>Current Balance:</strong> £{{ '%.2f' | format(customer.balance or 0) }}</li>
+                <li><strong>Plan:</strong> {{ user.membership_plan or 'Not selected' }}</li>
+                {% if customer.membership_end %}
+                <li><strong>Membership ends:</strong> {{ customer.membership_end.strftime('%d %b %Y') }}</li>
+                {% endif %}
+                {% if customer.discount_percent %}
+                <li><strong>Your discount:</strong> {{ customer.discount_percent | int }}%</li>
+                {% endif %}
             </ul>
-            <p class="safe-note">No real money is taken. This feature demonstrates how commercial gym billing could work.</p>
         </div>
     </div>
 </section>
+
 {% endblock %}

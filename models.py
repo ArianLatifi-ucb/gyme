@@ -14,6 +14,11 @@ class User(db.Model):
     email = db.Column(db.String(120), unique=True, nullable=False)
     password_hash = db.Column(db.String(255), nullable=False)
     role = db.Column(db.String(20), default='customer', nullable=False)  # admin, trainer, customer
+    full_name = db.Column(db.String(120), nullable=True)
+    phone = db.Column(db.String(30), nullable=True)
+    membership_plan = db.Column(db.String(30), default='Not selected', nullable=True)
+    fitness_goal = db.Column(db.String(200), nullable=True)
+    last_login = db.Column(db.DateTime, nullable=True)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
 
     def set_password(self, password):
@@ -40,6 +45,9 @@ class Customer(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False, unique=True)
     plan_id = db.Column(db.Integer, db.ForeignKey('plans.id'), nullable=True)
     balance = db.Column(db.Float, default=0, nullable=False)
+    discount_percent = db.Column(db.Float, default=0, nullable=False)
+    membership_start = db.Column(db.DateTime, nullable=True)
+    membership_end = db.Column(db.DateTime, nullable=True)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
 
     user = db.relationship('User', backref=db.backref('customer', uselist=False, cascade='all, delete-orphan'))
@@ -57,6 +65,7 @@ class Course(db.Model):
     instructor = db.Column(db.String(120), nullable=False)
     image_url = db.Column(db.String(500), nullable=True)
     capacity = db.Column(db.Integer, default=12, nullable=False)
+    price = db.Column(db.Float, default=0, nullable=False)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 
@@ -132,6 +141,7 @@ class Booking(db.Model):
     booking_date = db.Column(db.String(20), nullable=False)
     booking_time = db.Column(db.String(20), nullable=False)
     status = db.Column(db.String(30), default='Confirmed', nullable=False)
+    amount_charged = db.Column(db.Float, default=0, nullable=False)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
 
     user = db.relationship('User', backref=db.backref('bookings', lazy=True))
