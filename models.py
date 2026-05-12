@@ -14,11 +14,6 @@ class User(db.Model):
     email = db.Column(db.String(120), unique=True, nullable=False)
     password_hash = db.Column(db.String(255), nullable=False)
     role = db.Column(db.String(20), default='customer', nullable=False)  # admin, trainer, customer
-    full_name = db.Column(db.String(120), nullable=True)
-    phone = db.Column(db.String(30), nullable=True)
-    membership_plan = db.Column(db.String(30), default='Not selected', nullable=False)
-    fitness_goal = db.Column(db.String(150), nullable=True)
-    last_login = db.Column(db.DateTime, nullable=True)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
 
     def set_password(self, password):
@@ -26,6 +21,29 @@ class User(db.Model):
 
     def check_password(self, password):
         return check_password_hash(self.password_hash, password)
+
+
+class Plan(db.Model):
+    __tablename__ = 'plans'
+
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(120), nullable=False)
+    price = db.Column(db.Float, nullable=False)
+    description = db.Column(db.Text, nullable=False)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+
+
+class Customer(db.Model):
+    __tablename__ = 'customers'
+
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False, unique=True)
+    plan_id = db.Column(db.Integer, db.ForeignKey('plans.id'), nullable=True)
+    balance = db.Column(db.Float, default=0, nullable=False)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+
+    user = db.relationship('User', backref=db.backref('customer', uselist=False, cascade='all, delete-orphan'))
+    plan = db.relationship('Plan', backref=db.backref('customers', lazy=True))
 
 
 class Course(db.Model):

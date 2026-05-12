@@ -38,11 +38,6 @@
                 <li><a href="{{ url_for('profile') }}">Profile</a></li>
                 <li><a href="{{ url_for('billing') }}">Billing</a></li>
             {% endif %}
-            {% if session.get('role') == 'admin' %}
-                <li><a href="{{ url_for('admin') }}">Control Centre</a></li>
-                <li><a href="{{ url_for('admin_bookings') }}">Bookings</a></li>
-                <li><a href="{{ url_for('admin_billing') }}">Payments</a></li>
-            {% endif %}
         </ul>
         <div class="nav-auth">
             {% if session.get('username') %}

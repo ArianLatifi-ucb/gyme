@@ -2,7 +2,7 @@
 """Initialize GymE database with demo admin, trainer and member data."""
 
 from app import app, db, ensure_member_columns
-from models import User, Course, ClassSession, Staff, OpeningHours, Booking
+from models import User, Course, ClassSession, Staff, OpeningHours, Booking, Plan, Customer
 
 
 def init_db():
@@ -17,9 +17,9 @@ def init_db():
 def create_users():
     with app.app_context():
         users = [
-            User(username='admin', email='admin@gyme.com', role='admin', full_name='GymE Administrator', membership_plan='Admin Access'),
-            User(username='trainer', email='trainer@gyme.com', role='trainer', full_name='GymE Trainer', membership_plan='Trainer Access'),
-            User(username='member', email='member@gyme.com', role='customer', full_name='Demo Member', membership_plan='Basic'),
+            User(username='admin', email='admin@gyme.com', role='admin'),
+            User(username='trainer', email='trainer@gyme.com', role='trainer'),
+            User(username='member', email='member@gyme.com', role='customer'),
         ]
         users[0].set_password('admin123')
         users[1].set_password('trainer123')
@@ -30,6 +30,33 @@ def create_users():
         print("  Admin: admin / admin123")
         print("  Trainer: trainer / trainer123")
         print("  Member: member / member123")
+
+
+def create_default_plans():
+    with app.app_context():
+        plans = [
+            Plan(name='Basic', price=18.00, description='Access to all basic gym facilities and group classes'),
+            Plan(name='Pro', price=25.00, description='Premium access with personal training sessions and priority booking'),
+            Plan(name='Pro Plus', price=39.00, description='Unlimited premium access with 1-on-1 coaching and nutrition consultation'),
+        ]
+        db.session.add_all(plans)
+        db.session.commit()
+        print(f"✓ Created {len(plans)} membership plans")
+
+
+def create_customer_profiles():
+    with app.app_context():
+        users = User.query.all()
+        basic_plan = Plan.query.filter_by(name='Basic').first()
+
+        for user in users:
+            if not user.customer:
+                plan_id = basic_plan.id if user.role == 'customer' else None
+                customer = Customer(user_id=user.id, plan_id=plan_id, balance=0)
+                db.session.add(customer)
+
+        db.session.commit()
+        print("✓ Customer profiles created for all users")
 
 
 def create_initial_courses():
@@ -114,6 +141,8 @@ def create_initial_opening_hours():
 if __name__ == '__main__':
     init_db()
     create_users()
+    create_default_plans()
+    create_customer_profiles()
     create_initial_courses()
     create_initial_trainers()
     create_initial_sessions()
