@@ -1,26 +1,15 @@
 {% extends "base.html" %}
 
-{% block title %}Manage Staff - GymE{% endblock %}
-
-{% block header_title %}Staff Management{% endblock %}
-{% block header_subtitle %}Add, edit, or remove staff members{% endblock %}
+{% block title %}Manage Trainers - GymE{% endblock %}
+{% block header_title %}Trainer Management{% endblock %}
+{% block header_subtitle %}Add, edit, or remove trainers{% endblock %}
 
 {% block content %}
-<section id="staff-management">
-    <h2>Manage Staff</h2>
-
-    {% with messages = get_flashed_messages(with_categories=true) %}
-        {% if messages %}
-            {% for category, message in messages %}
-                <div class="alert alert-{{ category }}">{{ message }}</div>
-            {% endfor %}
-        {% endif %}
-    {% endwith %}
-
+<section id="trainer-management">
+    <h2>Manage Trainers</h2>
     <div style="margin-bottom: 2rem;">
-        <a href="{{ url_for('admin_add_staff') }}"><button class="btn-primary">+ Add New Staff Member</button></a>
+        <a href="{{ url_for('admin_add_staff') }}"><button class="btn-primary">+ Add New Trainer</button></a>
     </div>
-
     {% if staff %}
         <div class="staff-admin-grid">
             {% for member in staff %}
@@ -30,18 +19,14 @@
                     <p class="staff-role">{{ member.role }}</p>
                     <p class="staff-bio">{{ member.bio[:100] }}...</p>
                     <div class="staff-actions">
-                        <a href="{{ url_for('admin_edit_staff', staff_id=member.id) }}">
-                            <button class="btn-edit">Edit</button>
-                        </a>
-                        <form method="POST" action="{{ url_for('admin_delete_staff', staff_id=member.id) }}" class="inline-form" onsubmit="return confirm('Are you sure?');">
-                            <button type="submit" class="btn-delete">Delete</button>
-                        </form>
+                        <a href="{{ url_for('admin_edit_staff', staff_id=member.id) }}"><button class="btn-edit">Edit</button></a>
+                        <form method="POST" action="{{ url_for('admin_delete_staff', staff_id=member.id) }}" class="inline-form" onsubmit="return confirm('Are you sure?');"><button type="submit" class="btn-delete">Delete</button></form>
                     </div>
                 </div>
             {% endfor %}
         </div>
     {% else %}
-        <p>No staff members found. <a href="{{ url_for('admin_add_staff') }}">Add one</a></p>
+        <p>No trainers found. <a href="{{ url_for('admin_add_staff') }}">Add one</a></p>
     {% endif %}
 </section>
 {% endblock %}

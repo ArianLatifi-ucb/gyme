@@ -2,7 +2,9 @@ from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import datetime
 
+
 db = SQLAlchemy()
+
 
 class User(db.Model):
     __tablename__ = 'users'
@@ -11,7 +13,12 @@ class User(db.Model):
     username = db.Column(db.String(80), unique=True, nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
     password_hash = db.Column(db.String(255), nullable=False)
-    role = db.Column(db.String(20), default='customer', nullable=False)  # admin, customer, trainer
+    role = db.Column(db.String(20), default='customer', nullable=False)  # admin, trainer, customer
+    full_name = db.Column(db.String(120), nullable=True)
+    phone = db.Column(db.String(30), nullable=True)
+    membership_plan = db.Column(db.String(30), default='Not selected', nullable=False)
+    fitness_goal = db.Column(db.String(150), nullable=True)
+    last_login = db.Column(db.DateTime, nullable=True)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
 
     def set_password(self, password):
@@ -20,9 +27,6 @@ class User(db.Model):
     def check_password(self, password):
         return check_password_hash(self.password_hash, password)
 
-    def __repr__(self):
-        return f'<User {self.username}>'
-
 
 class Course(db.Model):
     __tablename__ = 'courses'
@@ -30,15 +34,37 @@ class Course(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(120), nullable=False)
     description = db.Column(db.Text, nullable=False)
-    duration = db.Column(db.Integer, nullable=False)  # in minutes
+    duration = db.Column(db.Integer, nullable=False)
     schedule = db.Column(db.String(200), nullable=False)
     instructor = db.Column(db.String(120), nullable=False)
     image_url = db.Column(db.String(500), nullable=True)
+    capacity = db.Column(db.Integer, default=12, nullable=False)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 
-    def __repr__(self):
-        return f'<Course {self.name}>'
+
+class ClassSession(db.Model):
+    __tablename__ = 'class_sessions'
+
+    id = db.Column(db.Integer, primary_key=True)
+    course_id = db.Column(db.Integer, db.ForeignKey('courses.id'), nullable=False)
+    session_date = db.Column(db.String(20), nullable=False)
+    session_time = db.Column(db.String(20), nullable=False)
+    trainer = db.Column(db.String(120), nullable=False)
+    capacity = db.Column(db.Integer, default=12, nullable=False)
+    status = db.Column(db.String(30), default='Open', nullable=False)
+    created_by = db.Column(db.String(80), nullable=True)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+
+    course = db.relationship('Course', backref=db.backref('sessions', lazy=True, cascade='all, delete-orphan'))
+
+    @property
+    def confirmed_count(self):
+        return Booking.query.filter_by(session_id=self.id, status='Confirmed').count()
+
+    @property
+    def seats_left(self):
+        return max((self.capacity or 0) - self.confirmed_count, 0)
 
 
 class Staff(db.Model):
@@ -51,18 +77,55 @@ class Staff(db.Model):
     photo_url = db.Column(db.String(500), nullable=False)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
 
-    def __repr__(self):
-        return f'<Staff {self.name}>'
-
 
 class OpeningHours(db.Model):
     __tablename__ = 'opening_hours'
 
     id = db.Column(db.Integer, primary_key=True)
-    day = db.Column(db.String(20), unique=True, nullable=False)  # Monday, Tuesday, etc., Holidays
-    opening_time = db.Column(db.String(10), nullable=False)  # HH:MM format
-    closing_time = db.Column(db.String(10), nullable=False)  # HH:MM format
+    day = db.Column(db.String(20), unique=True, nullable=False)
+    opening_time = db.Column(db.String(10), nullable=False)
+    closing_time = db.Column(db.String(10), nullable=False)
     updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 
-    def __repr__(self):
-        return f'<OpeningHours {self.day}>'
+
+class Payment(db.Model):
+    __tablename__ = 'payments'
+
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    plan = db.Column(db.String(30), nullable=False)
+    amount = db.Column(db.Float, nullable=False)
+    payment_method = db.Column(db.String(50), default='Demo Card', nullable=False)
+    cardholder_name = db.Column(db.String(120), nullable=True)
+    billing_email = db.Column(db.String(120), nullable=True)
+    status = db.Column(db.String(30), default='Paid', nullable=False)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+
+    user = db.relationship('User', backref=db.backref('payments', lazy=True))
+
+
+class Booking(db.Model):
+    __tablename__ = 'bookings'
+
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    course_id = db.Column(db.Integer, db.ForeignKey('courses.id'), nullable=False)
+    session_id = db.Column(db.Integer, db.ForeignKey('class_sessions.id'), nullable=True)
+    booking_date = db.Column(db.String(20), nullable=False)
+    booking_time = db.Column(db.String(20), nullable=False)
+    status = db.Column(db.String(30), default='Confirmed', nullable=False)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+
+    user = db.relationship('User', backref=db.backref('bookings', lazy=True))
+    course = db.relationship('Course', backref=db.backref('bookings', lazy=True))
+    session = db.relationship('ClassSession', backref=db.backref('bookings', lazy=True))
+
+
+class ContactMessage(db.Model):
+    __tablename__ = 'contact_messages'
+
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(120), nullable=False)
+    email = db.Column(db.String(120), nullable=False)
+    message = db.Column(db.Text, nullable=False)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)

@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block title %}GymE - Contact Messages{% endblock %}
+{% block header_title %}Contact Messages{% endblock %}
+{% block header_subtitle %}View customer messages from the homepage contact form.{% endblock %}
+
+{% block content %}
+<section>
+    <h2>Contact Messages</h2>
+    <div class="admin-table-container">
+        <table class="admin-table normal-table">
+            <thead><tr><th>Name</th><th>Email</th><th>Message</th><th>Date</th></tr></thead>
+            <tbody>
+                {% for message in messages %}
+                <tr><td>{{ message.name }}</td><td>{{ message.email }}</td><td>{{ message.message }}</td><td>{{ message.created_at.strftime('%d %b %Y') }}</td></tr>
+                {% else %}
+                <tr><td colspan="4">No messages yet.</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</section>
+{% endblock %}

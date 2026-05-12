@@ -3,45 +3,35 @@
 {% block title %}GymE - Gym Management System{% endblock %}
 
 {% block content %}
-<!-- Carousel Section -->
 <section class="carousel-section">
     <div class="carousel-container">
-        <!-- Slide 1 -->
         <div class="carousel-slide fade">
-            <img src="/static/images/carousel-1.jpg" alt="Carousel Slide 1" class="carousel-image">
+            <img src="/static/images/carousel-1.jpg" alt="Gym training area" class="carousel-image">
             <div class="carousel-content">
                 <h2>Transform Your Body</h2>
-                <p>Start your fitness journey with our expert trainers and state-of-the-art equipment</p>
-                <a href="/courses" class="carousel-link">Learn More</a>
+                <p>Start your fitness journey with expert trainers, modern equipment and flexible memberships.</p>
+                <a href="/courses" class="carousel-link">Explore Classes</a>
             </div>
         </div>
-
-        <!-- Slide 2 -->
         <div class="carousel-slide fade">
-            <img src="/static/images/carousel-2.jpg" alt="Carousel Slide 2" class="carousel-image">
+            <img src="/static/images/carousel-2.jpg" alt="Group class" class="carousel-image">
             <div class="carousel-content">
-                <h2>Personalized Training</h2>
-                <p>Get custom workout plans designed specifically for your goals and fitness level</p>
-                <a href="/courses" class="carousel-link">Learn More</a>
+                <h2>Book Classes Online</h2>
+                <p>Choose your course, select a date, reserve a place and manage bookings from your dashboard.</p>
+                <a href="/courses" class="carousel-link">Book Now</a>
             </div>
         </div>
-
-        <!-- Slide 3 -->
         <div class="carousel-slide fade">
-            <img src="/static/images/carousel-3.jpg" alt="Carousel Slide 3" class="carousel-image">
+            <img src="/static/images/carousel-3.jpg" alt="Fitness progress" class="carousel-image">
             <div class="carousel-content">
                 <h2>Join Our Community</h2>
-                <p>Be part of a supportive fitness community that motivates and inspires you daily</p>
-                <a href="/courses" class="carousel-link">Learn More</a>
+                <p>Be part of a supportive fitness community with billing, memberships and trainer support in one system.</p>
+                <a href="#membership" class="carousel-link">View Plans</a>
             </div>
         </div>
-
-        <!-- Previous/Next buttons -->
         <button class="carousel-button prev" onclick="changeSlide(-1)">&#10094;</button>
         <button class="carousel-button next" onclick="changeSlide(1)">&#10095;</button>
     </div>
-
-    <!-- Carousel indicators/dots -->
     <div class="carousel-indicators">
         <span class="dot" onclick="currentSlide(1)"></span>
         <span class="dot" onclick="currentSlide(2)"></span>
@@ -49,25 +39,24 @@
     </div>
 </section>
 
-<!-- Membership Plans Section -->
-<section id="membership" class="membership-section">
+<section id="membership" class="membership-section compact-membership">
     <h2>Membership Plans</h2>
-    <p>Choose the perfect plan for your fitness goals</p>
-    <div class="membership-grid">
-        <!-- Basic Plan -->
+    <p>Choose the perfect plan for your fitness goals.</p>
+    <div class="membership-grid compact-plans">
         <div class="membership-card">
+            <img src="/static/images/membership-basic.jpg" alt="Basic Membership" class="membership-plan-image">
             <h3>Basic</h3>
             <div class="price">£18<span class="price-period">/month</span></div>
             <ul class="features-list">
                 <li>✓ Limited access hours</li>
                 <li>✓ Book classes 8 days in advance</li>
+                <li>✓ Member dashboard</li>
             </ul>
-            <button onclick="joinMembership('Basic')">Join Now</button>
+            <form method="POST" action="{{ url_for('select_membership', plan='Basic') }}"><button type="submit">Join Now</button></form>
         </div>
-
-        <!-- Pro Plan -->
         <div class="membership-card pro-plan">
             <div class="popular-badge">POPULAR</div>
+            <img src="/static/images/membership-pro.jpg" alt="Pro Membership" class="membership-plan-image">
             <h3>Pro</h3>
             <div class="price">£25<span class="price-period">/month</span></div>
             <ul class="features-list">
@@ -75,55 +64,68 @@
                 <li>✓ Bring guests 4 times a month</li>
                 <li>✓ Dedicated locker</li>
             </ul>
-            <button onclick="joinMembership('Pro')">Join Now</button>
+            <form method="POST" action="{{ url_for('select_membership', plan='Pro') }}"><button type="submit">Join Now</button></form>
         </div>
-
-        <!-- Pro Plus Plan -->
         <div class="membership-card">
+            <img src="/static/images/membership-plus.jpg" alt="Pro Plus Membership" class="membership-plan-image">
             <h3>Pro Plus</h3>
             <div class="price">£39<span class="price-period">/month</span></div>
             <ul class="features-list">
                 <li>✓ 24 hour access</li>
                 <li>✓ Bring guests 6 times a month</li>
-                <li>✓ Dedicated locker</li>
                 <li>✓ Infinite flavoured water</li>
-                <li>✓ 50% discount on all courses</li>
+                <li>✓ 50% discount on courses</li>
             </ul>
-            <button onclick="joinMembership('Pro Plus')">Join Now</button>
+            <form method="POST" action="{{ url_for('select_membership', plan='Pro Plus') }}"><button type="submit">Join Now</button></form>
         </div>
     </div>
 </section>
 
-<!-- Courses Section -->
 <section id="courses" class="courses-section">
     <h2>Our Courses</h2>
-    <p>Explore our diverse range of fitness classes designed for all levels</p>
+    <p>Explore our diverse range of fitness classes designed for all levels.</p>
     <div class="course-list">
-        {% for course in courses %}
+        {% for course in courses[:6] %}
             <div class="course">
-                {% if course.image_url %}
-                    <img src="{{ course.image_url }}" alt="{{ course.name }}" class="course-image">
-                {% endif %}
+                <img src="{{ course.image_url }}" alt="{{ course.name }}" class="course-image">
                 <div class="course-content">
                     <h3>{{ course.name }}</h3>
                     <p>{{ course.description }}</p>
                     <p><strong>Duration:</strong> {{ course.duration }} minutes</p>
                     <p><strong>Schedule:</strong> {{ course.schedule }}</p>
-                    <p><strong>Instructor:</strong> {{ course.instructor }}</p>
-                    <button onclick="signUp('{{ course.name }}')">Sign Up</button>
+                    <p><strong>Trainer:</strong> {{ course.instructor }}</p>
+                    <form method="POST" action="{{ url_for('book_course', course_id=course.id) }}" class="booking-mini-form">
+                        <label>Choose date</label>
+                        <input type="date" name="booking_date" required>
+                        <label>Choose time</label>
+                        <select name="booking_time" required>
+                            <option value="07:00">07:00</option>
+                            <option value="12:00">12:00</option>
+                            <option value="18:00">18:00</option>
+                            <option value="19:30">19:30</option>
+                        </select>
+                        <button type="submit">Book Class</button>
+                    </form>
                 </div>
             </div>
         {% endfor %}
     </div>
-    <div style="text-align: center; margin-top: 2rem;">
-        <a href="/courses"><button>View All Courses</button></a>
+    <div class="center-action"><a href="/courses"><button>View All Courses</button></a></div>
+</section>
+
+<section id="equipment" class="equipment-section">
+    <h2>Gym Equipment</h2>
+    <p>Modern equipment areas available for members throughout the week.</p>
+    <div class="equipment-grid">
+        <div class="equipment-card"><img src="/static/images/course-strength.jpg" alt="Strength zone"><h3>Strength Zone</h3><p>Squat racks, bench press, dumbbells and cable machines.</p></div>
+        <div class="equipment-card"><img src="/static/images/carousel-1.jpg" alt="Cardio zone"><h3>Cardio Zone</h3><p>Treadmills, bikes and performance tracking for endurance training.</p></div>
+        <div class="equipment-card"><img src="/static/images/course-boxing.jpg" alt="Boxing studio"><h3>Boxing Studio</h3><p>Heavy bags, gloves and conditioning space for boxing fitness.</p></div>
     </div>
 </section>
 
-<!-- Our Staff Section -->
 <section id="staff" class="staff-section">
-    <h2>Meet Our Team</h2>
-    <p>Meet the experienced professionals dedicated to your fitness journey</p>
+    <h2>Meet Our Trainers</h2>
+    <p>Meet the experienced professionals dedicated to your fitness journey.</p>
     <div class="staff-grid">
         {% for member in staff %}
             <div class="staff-member">
@@ -136,50 +138,68 @@
     </div>
 </section>
 
-<!-- Opening Hours Section -->
+<section id="about" class="about-section">
+    <h2>About GymE</h2>
+    <div class="about-grid">
+        <div>
+            <p><strong>GymE</strong> is a modern gym management website created for members, trainers and administrators. Members can register, choose memberships, make demo payments, book classes by date and manage their profile.</p>
+            <p>The admin can manage members, trainers, courses, opening hours and payments. Trainers can view scheduled classes and member bookings.</p>
+        </div>
+        <div class="about-highlights">
+            <span>✓ Role-based access</span>
+            <span>✓ Membership billing</span>
+            <span>✓ Course booking calendar</span>
+            <span>✓ Admin management panel</span>
+        </div>
+    </div>
+</section>
+
 <section id="hours" class="hours-section">
     <h2>Opening Hours</h2>
-    <p>We're here for you throughout the week</p>
+    <p>We're here for you throughout the week.</p>
     <div class="hours-container">
         {% for h in hours %}
             <div class="hours-column">
                 <h3>{{ h.day }}</h3>
-                <div class="hours-item">
-                    <span class="day">{{ h.day }}</span>
-                    <span class="time">{{ h.opening_time }} - {{ h.closing_time }}</span>
-                </div>
+                <div class="hours-item"><span class="day">{{ h.day }}</span><span class="time">{{ h.opening_time }} - {{ h.closing_time }}</span></div>
             </div>
         {% endfor %}
     </div>
 </section>
 
-<!-- Offers Section -->
-<section id="offers" class="offers-section">
-    <h2>Special Offers</h2>
-    <p>Limited time deals to help you start your fitness journey</p>
-    <div class="offers-grid">
-        <div class="offer-card">
-            <div class="offer-badge">20% OFF</div>
-            <h3>New Member Special</h3>
-            <p>Get 20% discount on your first month membership when you sign up today.</p>
-            <p class="offer-validity"><strong>Valid until:</strong> Dec 31, 2026</p>
-            <button onclick="selectPlan('NewMember')">Claim Offer</button>
+<section id="contact" class="contact-section anchor-safe">
+    <div class="section-heading-row">
+        <div>
+            <p class="eyebrow dark">Need help?</p>
+            <h2>Contact GymE</h2>
+            <p>Speak with our team about memberships, class bookings, billing support or trainer guidance.</p>
         </div>
-
-        <div class="offer-card">
-            <div class="offer-badge">BUY 3 GET 1 FREE</div>
-            <h3>Group Training Sessions</h3>
-            <p>Buy 3 personal training sessions and get the 4th one absolutely free.</p>
-            <p class="offer-validity"><strong>Valid until:</strong> Dec 31, 2026</p>
-            <button onclick="selectPlan('GroupTraining')">Claim Offer</button>
+        <div class="contact-mini-card">
+            <strong>Quick Contact</strong>
+            <a href="mailto:support@gyme.com">support@gyme.com</a>
+            <a href="tel:+441210002026">+44 121 000 2026</a>
         </div>
+    </div>
 
-        <div class="offer-card">
-            <div class="offer-badge">FREE</div>
-            <h3>Fitness Assessment</h3>
-            <p>Complete fitness assessment and personalized workout plan for all new members at no cost.</p>
-            <p class="offer-validity"><strong>Valid until:</strong> Dec 31, 2026</p>
-            <button onclick="selectPlan('FitnessAssessment')">Claim Offer</button>
+    <div class="contact-grid refined-contact">
+        <div class="message-card large-message-card">
+            <h3>Send a Message</h3>
+            <p>Fill in the form and the GymE team will respond. This is saved into the admin messages panel.</p>
+            <form method="POST" action="{{ url_for('index') }}#contact" class="contact-form">
+                <label>Name</label>
+                <input type="text" name="name" placeholder="Your full name" required>
+                <label>Email</label>
+                <input type="email" name="email" placeholder="your@email.com" required>
+                <label>Message</label>
+                <textarea name="message" placeholder="How can we help you?" required></textarea>
+                <button type="submit">Send Message</button>
+            </form>
+        </div>
+        <div class="contact-info-modern">
+            <div><span>📍</span><strong>Address</strong><p>Birmingham, United Kingdom</p></div>
+            <div><span>📞</span><strong>Phone</strong><p><a href="tel:+441210002026">+44 121 000 2026</a></p></div>
+            <div><span>✉️</span><strong>Email</strong><p><a href="mailto:support@gyme.com">support@gyme.com</a></p></div>
+            <div><span>🕒</span><strong>Opening Hours</strong><p>Mon - Sat 6:00 AM - 11:00 PM<br>Sunday 8:00 AM - 10:00 PM</p></div>
         </div>
     </div>
 </section>

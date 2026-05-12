@@ -7,37 +7,67 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 <body>
-    <header>
-        <h1>{% block header_title %}Welcome to GymE{% endblock %}</h1>
-        <p>{% block header_subtitle %}Your comprehensive gym management solution{% endblock %}</p>
+    <header class="site-hero">
+        <div class="hero-overlay"></div>
+        <div class="hero-content">
+            <img src="{{ url_for('static', filename='images/logo.png') }}" alt="GymE Logo" class="hero-logo">
+            <span class="eyebrow">Premium Fitness Management</span>
+            <h1>{% block header_title %}Welcome to GymE{% endblock %}</h1>
+            <p>{% block header_subtitle %}Train smarter, manage better, and track your fitness journey in one place.{% endblock %}</p>
+        </div>
     </header>
 
-    <nav>
-        <div class="nav-auth">
-            {% if session.get('username') %}
-                <span class="username">{{ session['username'] }} ({{ session.get('role', 'customer') }})</span>
-                <a href="/logout"><button>Logout</button></a>
-            {% else %}
-                <a href="/login"><button>Login</button></a>
-                <a href="/register"><button class="btn-secondary">Sign Up</button></a>
-            {% endif %}
-        </div>
+    <nav class="main-nav">
+        <a class="brand" href="/"><img src="{{ url_for('static', filename='images/logo.png') }}" alt="GymE" class="nav-logo"><span>GymE</span></a>
         <ul>
             <li><a href="/">Home</a></li>
-            <li><a href="/#staff">Staff </a></li>
+            <li><a href="/#membership">Plans</a></li>
             <li><a href="/courses">Courses</a></li>
+            <li><a href="/#equipment">Equipment</a></li>
+            <li><a href="/#staff">Trainers</a></li>
+            <li><a href="/#about">About</a></li>
+            <li><a href="/#contact">Contact</a></li>
+            {% if session.get('username') %}
+                {% if session.get('role') == 'admin' %}
+                    <li><a href="{{ url_for('admin_dashboard') }}">Dashboard</a></li>
+                {% elif session.get('role') == 'trainer' %}
+                    <li><a href="{{ url_for('trainer_dashboard') }}">Trainer</a></li>
+                {% else %}
+                    <li><a href="{{ url_for('customer_dashboard') }}">Dashboard</a></li>
+                {% endif %}
+                <li><a href="{{ url_for('profile') }}">Profile</a></li>
+                <li><a href="{{ url_for('billing') }}">Billing</a></li>
+            {% endif %}
             {% if session.get('role') == 'admin' %}
-                <li><a href="/admin-dashboard">Admin Panel</a></li>
+                <li><a href="{{ url_for('admin') }}">Control Centre</a></li>
+                <li><a href="{{ url_for('admin_bookings') }}">Bookings</a></li>
+                <li><a href="{{ url_for('admin_billing') }}">Payments</a></li>
             {% endif %}
         </ul>
+        <div class="nav-auth">
+            {% if session.get('username') %}
+                <span class="username">{{ session['username'] }}</span>
+                <a href="/logout" class="nav-button outline">Logout</a>
+            {% else %}
+                <a href="/login" class="nav-button outline">Login</a>
+                <a href="/register" class="nav-button">Sign Up</a>
+            {% endif %}
+        </div>
     </nav>
 
     <main>
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }}">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
         {% block content %}{% endblock %}
     </main>
 
     <footer>
-        <p>&copy; 2026 GymE. All rights reserved.</p>
+        <p>&copy; 2026 GymE. Agile Gym Management System.</p>
     </footer>
 
     <script src="{{ url_for('static', filename='js/script.js') }}"></script>

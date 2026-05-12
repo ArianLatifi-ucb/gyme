@@ -1,73 +1,76 @@
 {% extends "base.html" %}
 
-{% block title %}Available Courses - GymE{% endblock %}
-
-{% block header_title %}GymE - Available Courses{% endblock %}
-{% block header_subtitle %}Explore our fitness classes and activities{% endblock %}
+{% block title %}GymE - Class Calendar{% endblock %}
+{% block header_title %}Class Calendar{% endblock %}
+{% block header_subtitle %}Choose a date, view available sessions and book your place.{% endblock %}
 
 {% block content %}
-<section id="courses">
-    <h2>Available Courses</h2>
+<section class="calendar-panel anchor-safe">
+    <div class="section-heading-row">
+        <div>
+            <p class="eyebrow dark">Live booking schedule</p>
+            <h2>Book Classes by Date</h2>
+            <p>Select a date to see which classes are running. Trainers and admins create these sessions.</p>
+        </div>
+        <form method="GET" action="{{ url_for('courses') }}" class="date-filter-card">
+            <label for="date">Select date</label>
+            <input type="date" id="date" name="date" value="{{ selected_date }}" onchange="this.form.submit()">
+            <button type="submit">View Schedule</button>
+        </form>
+    </div>
+
+    <div class="date-chip-row">
+        {% for d in all_session_dates[:8] %}
+            <a href="{{ url_for('courses', date=d) }}" class="date-chip {% if d == selected_date %}active{% endif %}">{{ d }}</a>
+        {% endfor %}
+    </div>
+
+    <div class="session-grid">
+        {% for s in sessions %}
+        <div class="session-card {% if s.status != 'Open' %}session-closed{% endif %}">
+            <img src="{{ s.course.image_url }}" alt="{{ s.course.name }}">
+            <div class="session-body">
+                <span class="status-pill">{{ s.status }}</span>
+                <h3>{{ s.course.name }}</h3>
+                <p>{{ s.course.description }}</p>
+                <div class="session-meta">
+                    <span>📅 {{ s.session_date }}</span>
+                    <span>⏰ {{ s.session_time }}</span>
+                    <span>👤 {{ s.trainer }}</span>
+                    <span>🪑 {{ s.seats_left }} seats left</span>
+                </div>
+                <form method="POST" action="{{ url_for('book_course', course_id=s.course.id) }}">
+                    <input type="hidden" name="session_id" value="{{ s.id }}">
+                    <button type="submit" {% if s.status != 'Open' or s.seats_left <= 0 %}disabled{% endif %}>Book This Class</button>
+                </form>
+            </div>
+        </div>
+        {% else %}
+            <div class="empty-state">
+                <h3>No classes on {{ selected_date }}</h3>
+                <p>Choose another date above or check the full class list below.</p>
+            </div>
+        {% endfor %}
+    </div>
+</section>
+
+<section class="courses-section">
+    <h2>All Courses</h2>
+    <p>These are the main classes available at GymE. Admins and trainers can create schedules from their dashboards.</p>
     <div class="course-list">
+        {% for course in courses %}
         <div class="course">
-            <img src="https://fastly.picsum.photos/id/10/400/300" alt="Yoga Basics" class="course-image">
+            <img src="{{ course.image_url }}" alt="{{ course.name }}" class="course-image">
             <div class="course-content">
-                <h3>Yoga Basics</h3>
-                <p>A beginner-friendly yoga class focusing on relaxation and flexibility.</p>
-                <p><strong>Duration:</strong> 60 minutes</p>
-                <p><strong>Schedule:</strong> Mondays and Wednesdays, 7:00 AM</p>
-                <p><strong>Instructor:</strong> Sarah Johnson</p>
-                <button onclick="signUp('Yoga Basics')">Sign Up</button>
+                <h3>{{ course.name }}</h3>
+                <p>{{ course.description }}</p>
+                <p><strong>Duration:</strong> {{ course.duration }} minutes</p>
+                <p><strong>Trainer:</strong> {{ course.instructor }}</p>
+                <p><strong>Capacity:</strong> {{ course.capacity or 12 }} members</p>
+                <a href="{{ url_for('courses') }}?date={{ selected_date }}" class="button-link small">Check Dates</a>
             </div>
         </div>
-
-        <div class="course">
-            <img src="https://fastly.picsum.photos/id/11/400/300" alt="HIIT Training" class="course-image">
-            <div class="course-content">
-                <h3>HIIT Training</h3>
-                <p>High-Intensity Interval Training for maximum calorie burn and fitness improvement.</p>
-                <p><strong>Duration:</strong> 45 minutes</p>
-                <p><strong>Schedule:</strong> Tuesdays and Thursdays, 6:00 PM</p>
-                <p><strong>Instructor:</strong> Mike Chen</p>
-                <button onclick="signUp('HIIT Training')">Sign Up</button>
-            </div>
-        </div>
-
-        <div class="course">
-            <img src="https://fastly.picsum.photos/id/12/400/300" alt="Strength Training" class="course-image">
-            <div class="course-content">
-                <h3>Strength Training</h3>
-                <p>Build muscle and strength with guided weight training sessions.</p>
-                <p><strong>Duration:</strong> 90 minutes</p>
-                <p><strong>Schedule:</strong> Fridays, 5:00 PM</p>
-                <p><strong>Instructor:</strong> Alex Rodriguez</p>
-                <button onclick="signUp('Strength Training')">Sign Up</button>
-            </div>
-        </div>
-
-        <div class="course">
-            <img src="https://fastly.picsum.photos/id/13/400/300" alt="Pilates Core" class="course-image">
-            <div class="course-content">
-                <h3>Pilates Core</h3>
-                <p>Focus on core strength and stability with Pilates exercises.</p>
-                <p><strong>Duration:</strong> 50 minutes</p>
-                <p><strong>Schedule:</strong> Saturdays, 10:00 AM</p>
-                <p><strong>Instructor:</strong> Emma Davis</p>
-                <button onclick="signUp('Pilates Core')">Sign Up</button>
-            </div>
-        </div>
-
-        <div class="course">
-            <img src="https://fastly.picsum.photos/id/14/400/300" alt="Zumba Dance" class="course-image">
-            <div class="course-content">
-                <h3>Zumba Dance</h3>
-                <p>Fun and energetic dance workout combining Latin rhythms with easy-to-follow moves.</p>
-                <p><strong>Duration:</strong> 60 minutes</p>
-                <p><strong>Schedule:</strong> Sundays, 11:00 AM</p>
-                <p><strong>Instructor:</strong> Carlos Martinez</p>
-                <button onclick="signUp('Zumba Dance')">Sign Up</button>
-            </div>
-        </div>
+        {% endfor %}
     </div>
 </section>
 {% endblock %}

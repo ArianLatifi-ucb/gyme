@@ -1,32 +1,38 @@
 {% extends "base.html" %}
 
 {% block title %}Login - GymE{% endblock %}
-
-{% block header_title %}GymE - Login{% endblock %}
-{% block header_subtitle %}Access your gym account{% endblock %}
+{% block header_title %}Member Login{% endblock %}
+{% block header_subtitle %}Access your secure member dashboard.{% endblock %}
 
 {% block content %}
-<section id="login-section">
-    <h2>Login</h2>
+<section id="login-section" class="auth-card">
+    <div class="auth-grid">
+        <div class="auth-info">
+            <h2>Welcome Back</h2>
+            <p>Log in to view your profile, membership status and available classes.</p>
+            <div class="mini-stat"><strong>Secure</strong><span>Password hashing and session control enabled</span></div>
+        </div>
+        <div>
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                        <div class="alert alert-{{ category }}">{{ message }}</div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
 
-    {% with messages = get_flashed_messages(with_categories=true) %}
-        {% if messages %}
-            {% for category, message in messages %}
-                <div class="alert alert-{{ category }}">{{ message }}</div>
-            {% endfor %}
-        {% endif %}
-    {% endwith %}
+            <form method="POST" class="login-form">
+                <label for="username">Username</label>
+                <input type="text" id="username" name="username" placeholder="Enter your username" required>
 
-    <form method="POST" class="login-form">
-        <label for="username">Username:</label>
-        <input type="text" id="username" name="username" placeholder="Enter your username" required>
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" placeholder="Enter your password" required>
 
-        <label for="password">Password:</label>
-        <input type="password" id="password" name="password" placeholder="Enter your password" required>
+                <button type="submit">Login</button>
+            </form>
 
-        <button type="submit">Login</button>
-    </form>
-
-    <p class="auth-link">Don't have an account? <a href="{{ url_for('register') }}">Sign up here</a></p>
+            <p class="auth-link">Don't have an account? <a href="{{ url_for('register') }}">Sign up here</a></p>
+        </div>
+    </div>
 </section>
 {% endblock %}

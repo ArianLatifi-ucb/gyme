@@ -32,14 +32,32 @@
 
         <div class="stat-card">
             <h3>{{ total_staff }}</h3>
-            <p>Staff Members</p>
-            <a href="{{ url_for('admin_staff') }}" class="stat-link">Manage Staff →</a>
+            <p>Trainers</p>
+            <a href="{{ url_for('admin_staff') }}" class="stat-link">Manage Trainers →</a>
         </div>
 
         <div class="stat-card">
             <h3>Hours</h3>
             <p>Opening Times</p>
             <a href="{{ url_for('admin_hours') }}" class="stat-link">Manage Hours →</a>
+        </div>
+
+        <div class="stat-card">
+            <h3>{{ total_sessions }}</h3>
+            <p>Class Sessions</p>
+            <a href="{{ url_for('admin_bookings') }}" class="stat-link">Manage Schedule →</a>
+        </div>
+
+        <div class="stat-card">
+            <h3>{{ total_bookings }}</h3>
+            <p>Total Bookings</p>
+            <a href="{{ url_for('admin_bookings') }}" class="stat-link">Manage Bookings →</a>
+        </div>
+
+        <div class="stat-card">
+            <h3>£{{ '%.0f'|format(total_revenue or 0) }}</h3>
+            <p>Billing Revenue</p>
+            <a href="{{ url_for('admin_billing') }}" class="stat-link">Billing Records →</a>
         </div>
     </div>
 
@@ -49,9 +67,13 @@
             <li><a href="{{ url_for('users') }}"> Manage Users</a></li>
             <li><a href="{{ url_for('admin_courses') }}"> Manage Courses</a></li>
             <li><a href="{{ url_for('admin_add_course') }}"> Add New Course</a></li>
-            <li><a href="{{ url_for('admin_staff') }}"> Manage Staff</a></li>
-            <li><a href="{{ url_for('admin_add_staff') }}"> Add New Staff Member</a></li>
+            <li><a href="{{ url_for('admin_staff') }}"> Manage Trainers</a></li>
+            <li><a href="{{ url_for('admin_add_staff') }}"> Add New Trainer</a></li>
             <li><a href="{{ url_for('admin_hours') }}"> Manage Opening Hours</a></li>
+            <li><a href="{{ url_for('admin_bookings') }}"> Manage Bookings & Class Sessions</a></li>
+            <li><a href="{{ url_for('admin_billing') }}"> View Billing Records</a></li>
+            <li><a href="{{ url_for('admin_messages') }}"> View Contact Messages</a></li>
+            <li><a href="{{ url_for('trainer_dashboard') }}"> Trainer Booking View</a></li>
         </ul>
     </div>
 </section>
