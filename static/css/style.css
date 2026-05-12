@@ -1102,3 +1102,1159 @@ form button {
     font-size: 0.75rem;
     letter-spacing: 0.5px;
 }
+
+/* ================= Professional UI Upgrade ================= */
+:root {
+    --dark: #111827;
+    --dark-2: #1f2937;
+    --accent: #22c55e;
+    --accent-2: #16a34a;
+    --muted: #6b7280;
+    --surface: #ffffff;
+    --soft: #f3f4f6;
+    --shadow: 0 14px 35px rgba(17, 24, 39, 0.12);
+}
+
+body {
+    background: linear-gradient(180deg, #f8fafc 0%, #eef2f7 100%);
+    font-family: Inter, Arial, sans-serif;
+}
+
+.site-hero {
+    min-height: 290px;
+    padding: 2rem;
+    overflow: hidden;
+    background: linear-gradient(135deg, rgba(17,24,39,0.70), rgba(34,197,94,0.35)), url('/static/images/header.jpg');
+    background-size: cover;
+    background-position: center;
+}
+
+.site-hero::before,
+.site-hero::after {
+    display: none;
+}
+
+.hero-overlay {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at 20% 20%, rgba(34,197,94,0.35), transparent 35%);
+}
+
+.hero-content {
+    position: relative;
+    z-index: 2;
+    max-width: 850px;
+    margin: 0 auto;
+}
+
+.hero-content h1 {
+    font-size: clamp(2rem, 4vw, 4rem);
+    letter-spacing: -1px;
+}
+
+.eyebrow {
+    display: inline-block;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-size: 0.8rem;
+    font-weight: 800;
+    color: #bbf7d0;
+    margin-bottom: 0.7rem;
+}
+
+.eyebrow.dark {
+    color: var(--accent-2);
+}
+
+.main-nav {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    background: rgba(17, 24, 39, 0.94);
+    backdrop-filter: blur(12px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.18);
+}
+
+.brand {
+    color: white;
+    text-decoration: none;
+    font-size: 1.4rem;
+    font-weight: 900;
+    margin-left: 1rem;
+}
+
+nav ul li a {
+    border-radius: 999px;
+    transition: 0.2s ease;
+}
+
+.nav-button,
+.button-link {
+    display: inline-block;
+    background: var(--accent);
+    color: white !important;
+    text-decoration: none;
+    border-radius: 999px;
+    padding: 0.65rem 1rem;
+    font-weight: 700;
+    border: none;
+    cursor: pointer;
+}
+
+.nav-button.outline,
+.button-link.secondary {
+    background: transparent;
+    border: 1px solid rgba(255,255,255,0.35);
+}
+
+.button-link.secondary {
+    color: var(--dark) !important;
+    border-color: #d1d5db;
+}
+
+.button-link.small {
+    padding: 0.5rem 0.85rem;
+    font-size: 0.9rem;
+}
+
+main {
+    padding-bottom: 6rem;
+}
+
+section {
+    border: 1px solid rgba(229, 231, 235, 0.9);
+    border-radius: 18px;
+    box-shadow: var(--shadow);
+}
+
+section h2 {
+    color: var(--dark);
+    border-bottom: 3px solid var(--accent);
+}
+
+button,
+.btn-primary {
+    background: var(--accent);
+    border-radius: 999px;
+    font-weight: 700;
+}
+
+button:hover,
+.btn-primary:hover,
+.button-link:hover {
+    background: var(--accent-2);
+    transform: translateY(-1px);
+}
+
+form input,
+form textarea,
+form select {
+    width: 100%;
+    padding: 0.85rem;
+    margin-top: 0.25rem;
+    border: 1px solid #d1d5db;
+    border-radius: 10px;
+    box-sizing: border-box;
+    background: #fff;
+}
+
+.auth-card {
+    max-width: 980px;
+    margin: 0 auto 2rem auto;
+    padding: 0;
+    overflow: hidden;
+}
+
+.auth-grid {
+    display: grid;
+    grid-template-columns: 1fr 1.1fr;
+    min-height: 420px;
+}
+
+.auth-info {
+    background: linear-gradient(135deg, rgba(17,24,39,0.93), rgba(34,197,94,0.72)), url('/static/images/auth-bg.jpg');
+    background-size: cover;
+    background-position: center;
+    color: white;
+    padding: 2.5rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.auth-grid > div:last-child {
+    padding: 2.5rem;
+}
+
+.check-list {
+    list-style: none;
+    padding: 0;
+    margin-top: 1.5rem;
+}
+
+.check-list li {
+    margin: 0.8rem 0;
+    padding-left: 1.8rem;
+    position: relative;
+}
+
+.check-list li::before {
+    content: '✓';
+    position: absolute;
+    left: 0;
+    color: #bbf7d0;
+    font-weight: 900;
+}
+
+.form-hint {
+    color: var(--muted);
+    display: block;
+    margin-top: 0.3rem;
+}
+
+.success-text {
+    color: var(--accent-2);
+    font-weight: 700;
+}
+
+.mini-stat {
+    margin-top: 1.5rem;
+    background: rgba(255,255,255,0.12);
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 14px;
+    padding: 1rem;
+}
+
+.mini-stat span {
+    display: block;
+    opacity: 0.85;
+    margin-top: 0.25rem;
+}
+
+.dashboard-hero-card {
+    display: flex;
+    justify-content: space-between;
+    gap: 2rem;
+    align-items: center;
+    background: linear-gradient(135deg, #ffffff, #ecfdf5);
+}
+
+.dashboard-actions {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.soft-stats .stat-card {
+    background: linear-gradient(135deg, var(--dark), #334155);
+}
+
+.profile-card {
+    max-width: 950px;
+    margin: 0 auto 2rem auto;
+}
+
+.profile-header {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 2rem;
+}
+
+.profile-avatar {
+    width: 76px;
+    height: 76px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--accent), #0f766e);
+    color: white;
+    display: grid;
+    place-items: center;
+    font-size: 2rem;
+    font-weight: 900;
+}
+
+.profile-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1rem;
+}
+
+.profile-item {
+    background: var(--soft);
+    border-radius: 14px;
+    padding: 1rem;
+    border: 1px solid #e5e7eb;
+}
+
+.profile-item span {
+    display: block;
+    color: var(--muted);
+    font-size: 0.9rem;
+    margin-bottom: 0.35rem;
+}
+
+.course,
+.staff-member,
+.offer-card,
+.membership-card,
+.hours-column {
+    border-radius: 18px;
+}
+
+.course-image {
+    height: 230px;
+}
+
+footer {
+    position: static;
+    background: var(--dark);
+}
+
+@media (max-width: 800px) {
+    .main-nav {
+        flex-direction: column;
+        gap: 1rem;
+    }
+    nav ul li {
+        display: block;
+        margin: 0.5rem 0;
+    }
+    .auth-grid {
+        grid-template-columns: 1fr;
+    }
+    .dashboard-hero-card,
+    .profile-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+}
+
+
+/* ==========================================================
+   GymE Dark Blue Premium Theme Upgrade
+   Replace the green theme with a modern navy / electric blue style.
+   ========================================================== */
+:root {
+    --dark: #06111f;
+    --dark-2: #0b1f35;
+    --dark-3: #102a44;
+    --accent: #1d9bf0;
+    --accent-2: #0a66c2;
+    --accent-light: #8fd3ff;
+    --muted: #64748b;
+    --surface: #ffffff;
+    --soft: #eef5fb;
+    --border: #d7e2ef;
+    --shadow: 0 18px 45px rgba(2, 12, 27, 0.14);
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+    background: radial-gradient(circle at top, #f4f9ff 0%, #eaf1f8 42%, #dfe8f2 100%);
+    color: #102033;
+    font-family: Inter, Arial, Helvetica, sans-serif;
+}
+
+/* Hero background: dark blue, no green layer */
+header,
+.site-hero {
+    min-height: 310px;
+    padding: 2.2rem 1rem;
+    background:
+        linear-gradient(135deg, rgba(3, 14, 30, 0.86), rgba(9, 37, 68, 0.68), rgba(29, 155, 240, 0.22)),
+        url('/static/images/header.jpg') center/cover no-repeat !important;
+    overflow: hidden;
+}
+
+header::before,
+header::after,
+.site-hero::before,
+.site-hero::after {
+    display: none !important;
+}
+
+.hero-overlay {
+    position: absolute;
+    inset: 0;
+    background:
+        radial-gradient(circle at 28% 15%, rgba(29, 155, 240, 0.35), transparent 34%),
+        linear-gradient(90deg, rgba(6,17,31,0.40), rgba(6,17,31,0.10));
+    pointer-events: none;
+}
+
+.hero-content h1,
+header h1 {
+    font-size: clamp(2rem, 4.2vw, 4.2rem);
+    line-height: 1.05;
+    letter-spacing: -1.2px;
+    text-shadow: 0 8px 35px rgba(0,0,0,0.55);
+}
+
+.hero-content p,
+header p {
+    color: #dbeafe;
+    font-weight: 600;
+    text-shadow: 0 6px 22px rgba(0,0,0,0.55);
+}
+
+.eyebrow,
+.eyebrow.dark {
+    color: var(--accent-light) !important;
+    letter-spacing: 2.4px;
+}
+
+/* Nav */
+nav,
+.main-nav {
+    background: rgba(6, 17, 31, 0.96) !important;
+    backdrop-filter: blur(16px);
+    border-bottom: 1px solid rgba(143, 211, 255, 0.12);
+    box-shadow: 0 10px 34px rgba(2, 12, 27, 0.28);
+}
+
+.brand { color: #ffffff !important; }
+
+nav ul li a {
+    color: #eaf4ff !important;
+    border-radius: 999px;
+    transition: 0.25s ease;
+}
+
+nav ul li a:hover {
+    background: rgba(29, 155, 240, 0.16) !important;
+    color: #ffffff !important;
+}
+
+.nav-auth .username { color: #dbeafe; }
+
+.nav-button,
+.button-link,
+button,
+.btn-primary,
+.carousel-link {
+    background: linear-gradient(135deg, var(--accent), var(--accent-2)) !important;
+    color: #ffffff !important;
+    border: none !important;
+    border-radius: 999px !important;
+    font-weight: 800 !important;
+    box-shadow: 0 10px 24px rgba(29,155,240,0.23);
+    transition: 0.25s ease;
+}
+
+.nav-button:hover,
+.button-link:hover,
+button:hover,
+.btn-primary:hover,
+.carousel-link:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 14px 32px rgba(10,102,194,0.32);
+}
+
+.nav-button.outline,
+.button-link.secondary,
+.btn-secondary,
+.nav-auth button.btn-secondary {
+    background: transparent !important;
+    border: 1px solid rgba(143, 211, 255, 0.38) !important;
+    color: #eaf4ff !important;
+    box-shadow: none;
+}
+
+.button-link.secondary {
+    color: var(--dark) !important;
+    border-color: #cbd5e1 !important;
+}
+
+/* Layout cards */
+main { max-width: 1220px; }
+
+section,
+.auth-card,
+.profile-card,
+.dashboard-hero-card,
+.admin-menu,
+.admin-form,
+.admin-table-container,
+.staff-member,
+.course,
+.offer-card,
+.membership-card,
+.hours-column,
+.hours-admin-card,
+.plan,
+.course-preview {
+    border-radius: 22px !important;
+    border: 1px solid rgba(203, 213, 225, 0.95) !important;
+    box-shadow: var(--shadow) !important;
+    background: rgba(255,255,255,0.92) !important;
+}
+
+section h2,
+.admin-menu h3,
+.course h3,
+.staff-member h3,
+.hours-column h3,
+.hours-admin-card h3,
+.course-preview h3,
+.plan h3,
+.membership-card h3 {
+    color: var(--dark-2) !important;
+    border-bottom-color: var(--accent) !important;
+}
+
+/* Register/Login/auth panels */
+.auth-info {
+    background:
+        linear-gradient(135deg, rgba(3, 14, 30, 0.94), rgba(10, 102, 194, 0.66)),
+        url('/static/images/auth-bg.jpg') center/cover no-repeat !important;
+    color: white;
+}
+
+.auth-info h2,
+.auth-info p,
+.auth-info li { color: #ffffff !important; }
+
+.check-list li::before { color: var(--accent-light) !important; }
+
+form input,
+form textarea,
+form select {
+    border: 1px solid var(--border) !important;
+    border-radius: 13px !important;
+    background: #ffffff !important;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+form input:focus,
+form textarea:focus,
+form select:focus {
+    outline: none;
+    border-color: var(--accent) !important;
+    box-shadow: 0 0 0 4px rgba(29,155,240,0.14);
+}
+
+.auth-link a,
+a { color: var(--accent-2); }
+
+/* Home carousel */
+.carousel-container {
+    border-radius: 24px !important;
+    box-shadow: 0 22px 55px rgba(2, 12, 27, 0.20) !important;
+    border: 1px solid rgba(203, 213, 225, 0.85);
+}
+
+.carousel-slide::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(120deg, rgba(3,14,30,0.46), rgba(10,102,194,0.12), rgba(3,14,30,0.30));
+    pointer-events: none;
+}
+
+.carousel-content { z-index: 2; }
+.carousel-content h2 { text-shadow: 0 10px 35px rgba(0,0,0,0.65); }
+.carousel-content p { color: #eaf4ff; }
+
+.carousel-indicators { background: transparent !important; }
+.dot.active { background: var(--accent) !important; }
+
+/* Membership/cards */
+.membership-card:hover,
+.offer-card:hover,
+.course:hover,
+.staff-member:hover,
+.plan:hover {
+    border-color: var(--accent) !important;
+    transform: translateY(-7px);
+    box-shadow: 0 22px 52px rgba(29,155,240,0.18) !important;
+}
+
+.pro-plan,
+.plan.premium {
+    border-color: var(--accent) !important;
+    background: linear-gradient(135deg, #eff8ff 0%, #ffffff 100%) !important;
+}
+
+.popular-badge,
+.offer-badge {
+    background: linear-gradient(135deg, var(--accent), var(--accent-2)) !important;
+}
+
+.price,
+.membership-card .price,
+.plan .price { color: var(--dark) !important; }
+
+.features-list li { color: #334155; }
+
+/* Dashboard/Profile */
+.dashboard-hero-card {
+    background: linear-gradient(135deg, #ffffff, #eff8ff) !important;
+}
+
+.soft-stats .stat-card,
+.stat-card {
+    background: linear-gradient(135deg, #06111f, #0b2d50, #0a66c2) !important;
+    box-shadow: 0 18px 45px rgba(10,102,194,0.24) !important;
+    border: 1px solid rgba(143, 211, 255, 0.20) !important;
+}
+
+.profile-avatar {
+    background: linear-gradient(135deg, var(--accent), var(--accent-2)) !important;
+    box-shadow: 0 12px 30px rgba(29,155,240,0.28);
+}
+
+.profile-item {
+    background: linear-gradient(135deg, #f8fbff, #eef5fb) !important;
+    border: 1px solid #dbe7f4 !important;
+}
+
+.profile-item strong,
+.profile-item b { color: var(--dark); }
+
+/* Tables */
+.users-table th,
+.admin-table th {
+    background: linear-gradient(135deg, var(--dark-2), var(--accent-2)) !important;
+}
+
+.users-table tbody tr:hover,
+.admin-table tbody tr:hover {
+    background: #eff8ff !important;
+}
+
+.role-customer { background: #475569 !important; }
+.role-trainer { background: var(--accent-2) !important; }
+.role-admin { background: #dc2626 !important; }
+
+/* Footer */
+footer {
+    background: #06111f !important;
+    border-top: 1px solid rgba(143, 211, 255, 0.12);
+}
+
+/* Recommended classes images */
+.course-image {
+    min-height: 230px;
+    background: #dbeafe;
+    object-fit: cover;
+}
+
+/* Better responsive spacing */
+@media (max-width: 900px) {
+    main { padding: 1rem; }
+    .carousel-image { height: 360px; }
+    .carousel-content h2 { font-size: 2rem; }
+}
+
+@media (max-width: 640px) {
+    header, .site-hero { min-height: 240px; }
+    .carousel-image { height: 280px; }
+    .auth-grid { grid-template-columns: 1fr !important; }
+    .membership-grid, .plans-grid, .course-list { grid-template-columns: 1fr !important; }
+}
+
+
+/* === FINAL BILLING UPGRADE + LAYOUT FIXES === */
+.membership-card,
+.offer-card,
+.course,
+.staff-member,
+.hours-column {
+    overflow: visible !important;
+}
+
+.membership-plan-image {
+    display: block;
+    width: 100%;
+    height: 130px;
+    object-fit: cover;
+    border-radius: 16px;
+    margin-bottom: 1.15rem;
+    box-shadow: 0 12px 30px rgba(2, 12, 27, 0.16);
+}
+
+.pro-plan {
+    padding-top: 2.5rem !important;
+}
+
+.popular-badge {
+    top: 12px !important;
+    z-index: 5 !important;
+    white-space: nowrap;
+}
+
+.offer-badge {
+    position: static !important;
+    display: inline-block;
+    margin-bottom: 1rem;
+    white-space: nowrap;
+}
+
+.offers-section,
+.membership-section,
+.courses-section,
+.staff-section,
+.hours-section {
+    clear: both;
+}
+
+.billing-page-section {
+    background: rgba(255,255,255,0.94) !important;
+    border-radius: 24px !important;
+    box-shadow: 0 20px 55px rgba(2, 12, 27, 0.16) !important;
+    border: 1px solid rgba(203, 213, 225, 0.95) !important;
+    padding: 2rem !important;
+}
+
+.billing-hero-card {
+    background:
+        linear-gradient(135deg, rgba(3, 14, 30, 0.88), rgba(10, 102, 194, 0.58)),
+        url('/static/images/billing-bg.jpg') center/cover no-repeat;
+    color: white;
+    border-radius: 22px;
+    padding: 2rem;
+    display: flex;
+    justify-content: space-between;
+    gap: 1.5rem;
+    align-items: center;
+    margin-bottom: 2rem;
+    box-shadow: 0 20px 45px rgba(10, 102, 194, 0.22);
+}
+
+.billing-hero-card h2,
+.billing-hero-card p,
+.billing-total-box span,
+.billing-total-box small {
+    color: white !important;
+}
+
+.eyebrow-dark {
+    display: inline-block;
+    color: #8fd3ff;
+    text-transform: uppercase;
+    font-weight: 800;
+    letter-spacing: 0.16em;
+    font-size: 0.75rem;
+    margin-bottom: 0.45rem;
+}
+
+.billing-total-box {
+    min-width: 170px;
+    text-align: center;
+    background: rgba(255,255,255,0.12);
+    border: 1px solid rgba(255,255,255,0.26);
+    border-radius: 18px;
+    padding: 1.25rem;
+    backdrop-filter: blur(10px);
+}
+
+.billing-total-box strong {
+    display: block;
+    font-size: 2.7rem;
+    line-height: 1;
+}
+
+.billing-grid {
+    display: grid;
+    grid-template-columns: 1.4fr 0.8fr;
+    gap: 1.5rem;
+}
+
+.billing-form-card,
+.billing-summary-card {
+    background: #ffffff;
+    border-radius: 20px;
+    border: 1px solid #dbe7f4;
+    box-shadow: 0 16px 36px rgba(2, 12, 27, 0.09);
+    padding: 1.5rem;
+}
+
+.payment-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+}
+
+.pay-button {
+    width: 100%;
+    margin-top: 1rem;
+    padding: 0.95rem 1rem !important;
+    border-radius: 999px !important;
+    font-weight: 800;
+}
+
+.billing-summary-card ul {
+    list-style: none;
+    padding: 0;
+    margin: 1rem 0;
+}
+
+.billing-summary-card li {
+    padding: 0.75rem 0;
+    border-bottom: 1px solid #edf2f7;
+    color: #334155;
+}
+
+.safe-note {
+    background: #eff8ff;
+    color: #0b2d50 !important;
+    border-left: 4px solid var(--accent);
+    border-radius: 12px;
+    padding: 1rem;
+    font-weight: 600;
+}
+
+.admin-table-container p strong {
+    color: var(--accent-2);
+}
+
+@media (max-width: 800px) {
+    .billing-hero-card,
+    .billing-grid,
+    .payment-row {
+        grid-template-columns: 1fr;
+        flex-direction: column;
+        align-items: stretch;
+    }
+}
+
+/* ===== GymE Final Commercial Website Polish ===== */
+:root {
+    --dark: #06111f;
+    --dark-2: #0b1f35;
+    --accent: #1d9bf0;
+    --accent-2: #0a66c2;
+    --gold: #f6c65b;
+}
+
+.site-hero {
+    min-height: 345px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+}
+
+.hero-content {
+    text-align: center;
+    max-width: 900px !important;
+}
+
+.hero-logo {
+    width: 118px;
+    height: 118px;
+    object-fit: contain;
+    display: block;
+    margin: 0 auto 0.25rem auto;
+    filter: drop-shadow(0 0 20px rgba(29,155,240,0.5)) drop-shadow(0 0 18px rgba(246,198,91,0.25));
+}
+
+.nav-logo {
+    width: 32px;
+    height: 32px;
+    object-fit: contain;
+    vertical-align: middle;
+    margin-right: 0.35rem;
+}
+
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    white-space: nowrap;
+}
+
+.main-nav {
+    padding: 0.45rem 1rem !important;
+    gap: 0.75rem;
+}
+
+.main-nav ul {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 0.35rem;
+}
+
+.main-nav ul li {
+    margin: 0 0.2rem !important;
+}
+
+.main-nav ul li a {
+    display: inline-block;
+    padding: 0.5rem 0.75rem !important;
+}
+
+.compact-plans {
+    grid-template-columns: repeat(3, minmax(230px, 1fr)) !important;
+    gap: 1.25rem !important;
+}
+
+.compact-membership .membership-card {
+    min-height: 520px;
+    padding: 1.3rem !important;
+}
+
+.compact-membership .membership-plan-image {
+    height: 115px !important;
+}
+
+.compact-membership .price {
+    margin: 0.7rem 0 !important;
+    font-size: 2.1rem !important;
+}
+
+.compact-membership .features-list {
+    margin: 1rem 0 !important;
+}
+
+.booking-mini-form {
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid #dbe7f4;
+}
+
+.booking-mini-form label {
+    font-size: 0.85rem;
+    color: #334155;
+}
+
+.booking-mini-form input,
+.booking-mini-form select {
+    margin-bottom: 0.65rem;
+}
+
+.booking-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+    gap: 1rem;
+}
+
+.booking-card {
+    background: linear-gradient(135deg, #ffffff, #eff8ff);
+    border: 1px solid #dbe7f4;
+    border-radius: 18px;
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.45rem;
+}
+
+.equipment-grid,
+.contact-grid,
+.about-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.25rem;
+    margin-top: 1.25rem;
+}
+
+.equipment-card {
+    background: #fff;
+    border-radius: 20px;
+    overflow: hidden;
+    border: 1px solid #dbe7f4;
+    box-shadow: 0 14px 35px rgba(2,12,27,0.10);
+}
+
+.equipment-card img {
+    width: 100%;
+    height: 190px;
+    object-fit: cover;
+}
+
+.equipment-card h3,
+.equipment-card p {
+    padding: 0 1rem;
+}
+
+.equipment-card p {
+    padding-bottom: 1rem;
+}
+
+.about-highlights {
+    display: grid;
+    gap: 0.65rem;
+}
+
+.about-highlights span {
+    background: #eff8ff;
+    border-left: 4px solid var(--accent);
+    padding: 0.85rem;
+    border-radius: 12px;
+    font-weight: 700;
+}
+
+.contact-showcase img {
+    width: 100%;
+    max-height: 390px;
+    object-fit: cover;
+    border-radius: 22px;
+    box-shadow: 0 18px 45px rgba(2,12,27,0.18);
+    margin-bottom: 1.25rem;
+}
+
+.contact-copy-card,
+.message-card {
+    background: #fff;
+    border-radius: 20px;
+    border: 1px solid #dbe7f4;
+    padding: 1.5rem;
+    box-shadow: 0 14px 35px rgba(2,12,27,0.09);
+}
+
+.contact-copy-card a {
+    font-weight: 800;
+    color: var(--accent-2);
+}
+
+.contact-form {
+    max-width: none;
+}
+
+.staff-photo,
+.staff-admin-photo {
+    height: 320px !important;
+    object-fit: cover !important;
+}
+
+.staff-role::before { content: '🏋️ '; }
+
+.admin-table td { display: table-cell !important; }
+.admin-table.normal-table td { display: table-cell !important; }
+
+.dashboard-stats .stat-card h3 {
+    font-size: 2rem;
+}
+
+.alert {
+    max-width: 1100px;
+    margin: 1rem auto;
+}
+
+@media (max-width: 900px) {
+    .compact-plans { grid-template-columns: 1fr !important; }
+    .main-nav ul { justify-content: flex-start; }
+    .hero-logo { width: 88px; height: 88px; }
+}
+
+/* Final real-world GymE upgrades */
+html { scroll-behavior: smooth; }
+section[id] { scroll-margin-top: 92px; }
+.anchor-safe { scroll-margin-top: 110px; }
+
+.site-hero { min-height: 330px; display: flex; align-items: center; justify-content: center; }
+.hero-logo { width: 130px !important; height: 130px !important; object-fit: contain; filter: drop-shadow(0 10px 25px rgba(0,140,255,.5)); }
+.hero-content { text-align: center; }
+.hero-content h1 { text-shadow: 0 6px 25px rgba(0,0,0,.55); }
+
+.membership-grid.compact-plans { align-items: stretch; }
+.compact-membership .membership-card { min-height: 470px !important; border-radius: 24px !important; display: flex; flex-direction: column; justify-content: space-between; }
+.compact-membership .membership-plan-image { border-radius: 18px !important; height: 140px !important; }
+.compact-membership .features-list li { padding: .5rem 0 !important; }
+
+.section-heading-row { display:flex; justify-content:space-between; align-items:flex-end; gap:1.5rem; flex-wrap:wrap; }
+.date-filter-card, .contact-mini-card { background:#fff; border:1px solid #dbe7f4; border-radius:18px; padding:1rem; box-shadow:0 12px 30px rgba(2,12,27,.08); }
+.date-filter-card { min-width:260px; }
+.date-filter-card input { margin:.4rem 0 .7rem; }
+.date-chip-row { display:flex; gap:.65rem; flex-wrap:wrap; margin:1rem 0; }
+.date-chip { text-decoration:none; padding:.7rem 1rem; border-radius:999px; background:#eff8ff; color:#0f3570; font-weight:800; border:1px solid #dbe7f4; }
+.date-chip.active { background:linear-gradient(135deg,#02408f,#1688ff); color:#fff; }
+.session-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:1.2rem; margin-top:1.3rem; }
+.session-card { background:#fff; border:1px solid #dbe7f4; border-radius:24px; overflow:hidden; box-shadow:0 18px 45px rgba(2,12,27,.12); }
+.session-card img { width:100%; height:180px; object-fit:cover; display:block; }
+.session-body { padding:1.1rem; }
+.session-meta { display:grid; grid-template-columns:1fr 1fr; gap:.5rem; margin:.9rem 0; color:#334155; font-weight:700; font-size:.9rem; }
+.status-pill { display:inline-block; background:#e8f4ff; color:#0352a6; padding:.35rem .7rem; border-radius:999px; font-weight:900; font-size:.78rem; }
+.session-closed { opacity:.7; }
+.empty-state { background:#fff; border:1px dashed #9ab9da; border-radius:22px; padding:2rem; text-align:center; grid-column:1/-1; }
+
+.member-welcome-card, .digital-member-card, .pro-dashboard { background:linear-gradient(135deg,#ffffff,#eef7ff); border:1px solid #dbe7f4; border-radius:26px; padding:1.4rem; box-shadow:0 18px 45px rgba(2,12,27,.10); }
+.member-welcome-card { display:flex; align-items:center; justify-content:space-between; gap:1.2rem; flex-wrap:wrap; }
+.member-avatar-large { width:78px; height:78px; border-radius:22px; display:flex; align-items:center; justify-content:center; color:#fff; font-size:2rem; font-weight:900; background:linear-gradient(135deg,#00346e,#1688ff); box-shadow:0 10px 24px rgba(0,75,160,.25); }
+.digital-member-card { color:#fff; background:radial-gradient(circle at 20% 20%,rgba(0,150,255,.35),transparent 35%), linear-gradient(135deg,#020b19,#00356f 55%,#07111f); display:flex; align-items:center; justify-content:space-between; gap:1rem; }
+.digital-member-card h3 { color:#fff; font-size:1.8rem; }
+.card-label { text-transform:uppercase; letter-spacing:2px; color:#9fd4ff; font-weight:800; font-size:.75rem; }
+.card-plan { font-size:1.5rem; font-weight:900; padding:.8rem 1rem; border:1px solid rgba(255,255,255,.2); border-radius:18px; }
+.qr-placeholder { width:82px; height:82px; border-radius:14px; background:#fff; color:#05224b; display:flex; align-items:center; justify-content:center; font-weight:900; }
+.premium-booking { border-left:5px solid #1688ff; }
+
+.premium-profile { max-width:850px; }
+.premium-profile .profile-header { background:linear-gradient(135deg,#f9fcff,#eef7ff); border-radius:22px; padding:1rem; }
+.profile-grid .profile-item { border:1px solid #dbe7f4; box-shadow:0 8px 22px rgba(2,12,27,.06); }
+
+.refined-contact { align-items:stretch; }
+.contact-mini-card { display:grid; gap:.25rem; }
+.contact-mini-card a { color:#0b64c7; font-weight:900; }
+.large-message-card { padding:2rem; }
+.contact-info-modern { display:grid; grid-template-columns:1fr 1fr; gap:1rem; }
+.contact-info-modern div { background:#fff; border:1px solid #dbe7f4; border-radius:20px; padding:1.2rem; box-shadow:0 12px 30px rgba(2,12,27,.08); }
+.contact-info-modern span { font-size:1.8rem; display:block; margin-bottom:.4rem; }
+.contact-info-modern strong { display:block; font-size:1.05rem; margin-bottom:.25rem; }
+.contact-info-modern a { color:#0b64c7; font-weight:900; }
+
+.horizontal-form { display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:.8rem; max-width:none; align-items:end; }
+.horizontal-form label { margin:0; }
+.horizontal-form button { align-self:end; }
+
+button:disabled { opacity:.45; cursor:not-allowed; }
+.btn-delete, .btn-edit, .btn-secondary { border-radius:999px; padding:.55rem .8rem; margin:.15rem; }
+
+@media (max-width: 900px) {
+  .contact-info-modern, .session-meta { grid-template-columns:1fr; }
+  .member-welcome-card, .digital-member-card { align-items:flex-start; }
+  .hero-logo { width:95px !important; height:95px !important; }
+}
+
+/* Admin Control Centre - separates Admin from Dashboard */
+.admin-control-centre .muted-text {
+    color: #64748b;
+    margin-bottom: 1.4rem;
+}
+
+.control-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 1.2rem;
+    margin-top: 1.5rem;
+}
+
+.control-card {
+    display: block;
+    padding: 1.5rem;
+    border-radius: 20px;
+    background: linear-gradient(135deg, rgba(7, 20, 41, 0.98), rgba(10, 102, 194, 0.92));
+    color: #ffffff;
+    text-decoration: none;
+    border: 1px solid rgba(75, 157, 255, 0.4);
+    box-shadow: 0 15px 30px rgba(7, 20, 41, 0.18);
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.control-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 20px 40px rgba(10, 102, 194, 0.28);
+}
+
+.control-icon {
+    font-size: 2rem;
+    display: inline-block;
+    margin-bottom: 0.6rem;
+}
+
+.control-card h3 {
+    color: #ffffff !important;
+    margin-bottom: 0.4rem;
+    border: none !important;
+}
+
+.control-card p {
+    color: rgba(255, 255, 255, 0.86);
+    line-height: 1.55;
+}
+
+.admin-live-section {
+    margin-top: 1.5rem;
+}

@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+
+{% block title %}Member Dashboard - GymE{% endblock %}
+{% block header_title %}Member Dashboard{% endblock %}
+{% block header_subtitle %}Track your membership, bookings, billing and fitness progress.{% endblock %}
+
+{% block content %}
+<section class="member-welcome-card">
+    <div class="member-avatar-large">{{ (user.full_name or user.username)[0]|upper }}</div>
+    <div>
+        <p class="eyebrow dark">Logged in as member</p>
+        <h2>Welcome back, {{ user.full_name or user.username }} 👋</h2>
+        <p>Manage bookings, update your profile, view membership status and keep track of your fitness journey.</p>
+    </div>
+    <div class="dashboard-actions">
+        <a href="{{ url_for('courses') }}" class="button-link">Book a Class</a>
+        <a href="{{ url_for('billing') }}" class="button-link secondary">Manage Billing</a>
+    </div>
+</section>
+
+<section class="member-card-section">
+    <h2>Digital Membership Card</h2>
+    <div class="digital-member-card">
+        <div>
+            <span class="card-label">GymE Membership</span>
+            <h3>{{ user.full_name or user.username }}</h3>
+            <p>{{ user.email }}</p>
+        </div>
+        <div class="card-plan">{{ user.membership_plan }}</div>
+        <div class="qr-placeholder">QR</div>
+    </div>
+</section>
+
+<section>
+    <h2>Account Overview</h2>
+    <div class="dashboard-stats soft-stats">
+        <div class="stat-card"><h3>{{ user.membership_plan }}</h3><p>Membership Plan</p></div>
+        <div class="stat-card"><h3>{{ bookings|selectattr('status','equalto','Confirmed')|list|length }}</h3><p>Active Bookings</p></div>
+        <div class="stat-card"><h3>{{ user.created_at.strftime('%d %b %Y') }}</h3><p>Joined Date</p></div>
+    </div>
+</section>
+
+<section>
+    <h2>My Booking History</h2>
+    {% if bookings %}
+        <div class="booking-list">
+        {% for booking in bookings %}
+            <div class="booking-card premium-booking">
+                <strong>{{ booking.course.name }}</strong>
+                <span>📅 {{ booking.booking_date }} at {{ booking.booking_time }}</span>
+                <span>👤 {{ booking.session.trainer if booking.session else booking.course.instructor }}</span>
+                <span class="status-pill">{{ booking.status }}</span>
+                {% if booking.status == 'Confirmed' %}
+                <form method="POST" action="{{ url_for('cancel_booking', booking_id=booking.id) }}">
+                    <button type="submit" class="btn-secondary">Cancel Booking</button>
+                </form>
+                {% endif %}
+            </div>
+        {% endfor %}
+        </div>
+    {% else %}
+        <div class="empty-state"><h3>No bookings yet</h3><p>Go to the class calendar and reserve your first session.</p><a href="{{ url_for('courses') }}" class="button-link">Book a Class</a></div>
+    {% endif %}
+</section>
+
+<section>
+    <h2>Recommended Classes</h2>
+    <div class="course-list">
+        {% for course in courses %}
+            <div class="course">
+                {% if course.image_url %}<img src="{{ course.image_url }}" alt="{{ course.name }}" class="course-image">{% endif %}
+                <div class="course-content">
+                    <h3>{{ course.name }}</h3>
+                    <p>{{ course.description }}</p>
+                    <p><strong>Trainer:</strong> {{ course.instructor }}</p>
+                    <a href="{{ url_for('courses') }}" class="button-link small">View Calendar</a>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</section>
+{% endblock %}

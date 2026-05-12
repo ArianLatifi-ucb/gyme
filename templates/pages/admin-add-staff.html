@@ -1,39 +1,18 @@
 {% extends "base.html" %}
 
-{% block title %}Add Staff Member - GymE{% endblock %}
-
-{% block header_title %}Add New Staff Member{% endblock %}
-{% block header_subtitle %}Create a new staff profile{% endblock %}
+{% block title %}Add Trainer - GymE{% endblock %}
+{% block header_title %}Add Trainer{% endblock %}
+{% block header_subtitle %}Create a new trainer profile for the website.{% endblock %}
 
 {% block content %}
-<section id="add-staff">
-    <h2>Add New Staff Member</h2>
-
-    {% with messages = get_flashed_messages(with_categories=true) %}
-        {% if messages %}
-            {% for category, message in messages %}
-                <div class="alert alert-{{ category }}">{{ message }}</div>
-            {% endfor %}
-        {% endif %}
-    {% endwith %}
-
+<section>
+    <h2>Add New Trainer</h2>
     <form method="POST" class="admin-form">
-        <label for="name">Staff Name:</label>
-        <input type="text" id="name" name="name" placeholder="e.g., Sarah Johnson" required>
-
-        <label for="role">Role/Title:</label>
-        <input type="text" id="role" name="role" placeholder="e.g., Yoga Instructor" required>
-
-        <label for="bio">Biography:</label>
-        <textarea id="bio" name="bio" placeholder="Write a short bio about the staff member" required></textarea>
-
-        <label for="photo_url">Photo URL:</label>
-        <input type="url" id="photo_url" name="photo_url" placeholder="e.g., https://via.placeholder.com/250x300" required>
-
-        <div class="form-actions">
-            <button type="submit" class="btn-primary">Add Staff Member</button>
-            <a href="{{ url_for('admin_staff') }}"><button type="button" class="btn-secondary">Cancel</button></a>
-        </div>
+        <label>Name</label><input type="text" name="name" required>
+        <label>Speciality / Role</label><input type="text" name="role" required>
+        <label>Bio</label><textarea name="bio" required></textarea>
+        <label>Photo URL</label><input type="text" name="photo_url" placeholder="/static/images/trainer-afsar.jpg" required>
+        <div class="form-actions"><button type="submit" class="btn-primary">Save Trainer</button><a href="{{ url_for('admin_staff') }}"><button type="button" class="btn-secondary">Cancel</button></a></div>
     </form>
 </section>
 {% endblock %}

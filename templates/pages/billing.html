@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+
+{% block title %}Billing & Membership Payment - GymE{% endblock %}
+{% block header_title %}Secure Membership Billing{% endblock %}
+{% block header_subtitle %}Complete your membership payment using the GymE demo billing system.{% endblock %}
+
+{% block content %}
+<section class="billing-page-section">
+    <div class="billing-hero-card">
+        <div>
+            <span class="eyebrow-dark">Demo Payment Gateway</span>
+            <h2>Activate Your {{ selected_plan }} Plan</h2>
+            <p>This is a safe assignment demo. It records a payment in the database but does not charge a real bank card.</p>
+        </div>
+        <div class="billing-total-box">
+            <span>Total</span>
+            <strong>£{{ amount }}</strong>
+            <small>/month</small>
+        </div>
+    </div>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="alert alert-{{ category }}">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
+    <div class="billing-grid">
+        <form method="POST" class="billing-form-card">
+            <h3>Payment Details</h3>
+            <input type="hidden" name="plan" value="{{ selected_plan }}">
+
+            <label>Selected Plan</label>
+            <input type="text" value="{{ selected_plan }} Membership - £{{ amount }}/month" readonly>
+
+            <label>Billing Email</label>
+            <input type="email" name="billing_email" value="{{ user.email }}" required>
+
+            <label>Cardholder Name</label>
+            <input type="text" name="cardholder_name" placeholder="Example: Afsar Ahmed" required>
+
+            <label>Demo Card Number</label>
+            <input type="text" placeholder="4242 4242 4242 4242" maxlength="19" required>
+
+            <div class="payment-row">
+                <div>
+                    <label>Expiry Date</label>
+                    <input type="text" placeholder="12/29" maxlength="5" required>
+                </div>
+                <div>
+                    <label>CVV</label>
+                    <input type="password" placeholder="123" maxlength="4" required>
+                </div>
+            </div>
+
+            <label>Payment Method</label>
+            <select name="payment_method" required>
+                <option value="Demo Card">Demo Card</option>
+                <option value="Bank Transfer Demo">Bank Transfer Demo</option>
+                <option value="Apple Pay Demo">Apple Pay Demo</option>
+            </select>
+
+            <button type="submit" class="pay-button">Confirm Demo Payment</button>
+        </form>
+
+        <div class="billing-summary-card">
+            <h3>Membership Summary</h3>
+            <ul>
+                <li><strong>Member:</strong> {{ user.username }}</li>
+                <li><strong>Email:</strong> {{ user.email }}</li>
+                <li><strong>Plan:</strong> {{ selected_plan }}</li>
+                <li><strong>Monthly Price:</strong> £{{ amount }}</li>
+                <li><strong>Status after payment:</strong> Active</li>
+            </ul>
+            <p class="safe-note">No real money is taken. This feature demonstrates how commercial gym billing could work.</p>
+        </div>
+    </div>
+</section>
+{% endblock %}
