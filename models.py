@@ -63,11 +63,14 @@ class Course(db.Model):
     duration = db.Column(db.Integer, nullable=False)
     schedule = db.Column(db.String(200), nullable=False)
     instructor = db.Column(db.String(120), nullable=False)
+    trainer_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=True)
     image_url = db.Column(db.String(500), nullable=True)
     capacity = db.Column(db.Integer, default=12, nullable=False)
     price = db.Column(db.Float, default=0, nullable=False)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+
+    assigned_trainer = db.relationship('User', foreign_keys=[trainer_id], backref=db.backref('assigned_courses', lazy=True))
 
 
 class ClassSession(db.Model):

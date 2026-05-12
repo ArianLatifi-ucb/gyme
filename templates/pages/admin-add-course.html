@@ -30,8 +30,21 @@
         <label for="schedule">Schedule:</label>
         <input type="text" id="schedule" name="schedule" placeholder="e.g., Mondays and Wednesdays, 7:00 AM" required>
 
+        {% if not trainer_mode %}
+        <label for="trainer_id">Assigned Trainer:</label>
+        <select id="trainer_id" name="trainer_id" required>
+            <option value="">-- Select a trainer --</option>
+            {% for t in trainers %}
+                <option value="{{ t.id }}">{{ t.full_name or t.username }} ({{ t.username }})</option>
+            {% endfor %}
+        </select>
+        {% if not trainers %}
+            <p class="form-hint">No trainers registered yet. <a href="{{ url_for('users') }}">Assign trainer role to a user first.</a></p>
+        {% endif %}
+        {% else %}
         <label for="instructor">Instructor Name:</label>
         <input type="text" id="instructor" name="instructor" placeholder="Instructor name" required>
+        {% endif %}
 
         <label for="image_url">Image URL (optional):</label>
         <input type="text" id="image_url" name="image_url" placeholder="e.g., /static/images/course-yoga.jpg">

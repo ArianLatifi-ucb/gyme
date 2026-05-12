@@ -33,6 +33,7 @@ def ensure_columns():
         ("customers", "membership_start",  "DATETIME"),
         ("customers", "membership_end",    "DATETIME"),
         ("courses",   "price",             "REAL DEFAULT 0"),
+        ("courses",   "trainer_id",        "INTEGER REFERENCES users(id)"),
         ("bookings",  "amount_charged",    "REAL DEFAULT 0"),
     ]
     for table, column, col_type in migrations:
@@ -147,7 +148,7 @@ def login():
             db.session.commit()
             flash(f'Welcome back, {user.username}!', 'success')
             if user.role == 'admin':
-                return redirect(url_for('admin_login'))
+                return redirect(url_for('admin_dashboard'))
             if user.role == 'trainer':
                 return redirect(url_for('trainer_dashboard'))
             return redirect(url_for('customer_dashboard'))
@@ -531,7 +532,7 @@ def trainer_add_course():
         flash('Course created by trainer.', 'success')
         return redirect(url_for('trainer_dashboard'))
 
-    return render_template('pages/admin-add-course.html', trainer_mode=True)
+    return render_template('pages/admin-add-course.html', trainer_mode=True, trainers=[])
 
 
 @app.route('/trainer/courses/<int:course_id>/edit', methods=['GET', 'POST'])
@@ -551,7 +552,7 @@ def trainer_edit_course(course_id):
         db.session.commit()
         flash('Course updated by trainer.', 'success')
         return redirect(url_for('trainer_dashboard'))
-    return render_template('pages/admin-edit-course.html', course=course, trainer_mode=True)
+    return render_template('pages/admin-edit-course.html', course=course, trainer_mode=True, trainers=[])
 
 
 @app.route('/session/<int:session_id>/cancel', methods=['POST'])
@@ -618,7 +619,23 @@ def admin_logout():
 def admin_dashboard():
     if not admin_required():
         return redirect(url_for('admin_login'))
-    return render_template('admin/dashboard.html')
+    total_users = User.query.count()
+    total_courses = Course.query.count()
+    total_staff = Staff.query.count()
+    total_sessions = ClassSession.query.count()
+    total_bookings = Booking.query.count()
+    total_revenue = db.session.query(db.func.sum(Payment.amount)).scalar() or 0
+    total_messages = ContactMessage.query.count()
+    return render_template(
+        'pages/admin-dashboard.html',
+        total_users=total_users,
+        total_courses=total_courses,
+        total_staff=total_staff,
+        total_sessions=total_sessions,
+        total_bookings=total_bookings,
+        total_revenue=total_revenue,
+        total_messages=total_messages,
+    )
 
 
 @app.route('/users')
@@ -676,24 +693,28 @@ def admin_courses():
 def admin_add_course():
     if not admin_required():
         return redirect(url_for('admin_login'))
+    trainers = User.query.filter_by(role='trainer').order_by(User.username).all()
     if request.method == 'POST':
         name = request.form.get('name')
         description = request.form.get('description')
         duration = request.form.get('duration')
         schedule = request.form.get('schedule')
-        instructor = request.form.get('instructor')
         image_url = request.form.get('image_url')
         capacity = int(request.form.get('capacity') or 12)
         price = float(request.form.get('price') or 0)
-        if not all([name, description, duration, schedule, instructor]):
-            flash('All fields are required.', 'error')
-            return redirect(url_for('admin_add_course'))
+        trainer_id = request.form.get('trainer_id') or None
+        trainer_user = User.query.get(int(trainer_id)) if trainer_id else None
+        instructor = (trainer_user.full_name or trainer_user.username) if trainer_user else ''
+        if not all([name, description, duration, schedule, trainer_id]):
+            flash('All fields are required, including a trainer.', 'error')
+            return render_template('pages/admin-add-course.html', trainer_mode=False, trainers=trainers)
         course = Course()
         course.name = name
         course.description = description
         course.duration = int(duration)
         course.schedule = schedule
         course.instructor = instructor
+        course.trainer_id = int(trainer_id)
         course.image_url = image_url
         course.capacity = capacity
         course.price = price
@@ -701,7 +722,7 @@ def admin_add_course():
         db.session.commit()
         flash('Course created.', 'success')
         return redirect(url_for('admin_courses'))
-    return render_template('pages/admin-add-course.html', trainer_mode=False)
+    return render_template('pages/admin-add-course.html', trainer_mode=False, trainers=trainers)
 
 
 @app.route('/admin/courses/<int:course_id>/edit', methods=['GET', 'POST'])
@@ -709,19 +730,23 @@ def admin_edit_course(course_id):
     if not admin_required():
         return redirect(url_for('admin_login'))
     course = Course.query.get_or_404(course_id)
+    trainers = User.query.filter_by(role='trainer').order_by(User.username).all()
     if request.method == 'POST':
+        trainer_id = request.form.get('trainer_id') or None
+        trainer_user = User.query.get(int(trainer_id)) if trainer_id else None
         course.name = request.form.get('name', course.name)
         course.description = request.form.get('description', course.description)
         course.duration = int(request.form.get('duration') or course.duration)
         course.schedule = request.form.get('schedule', course.schedule)
-        course.instructor = request.form.get('instructor', course.instructor)
+        course.trainer_id = int(trainer_id) if trainer_id else course.trainer_id
+        course.instructor = (trainer_user.full_name or trainer_user.username) if trainer_user else course.instructor
         course.image_url = request.form.get('image_url', course.image_url)
         course.capacity = int(request.form.get('capacity') or course.capacity or 12)
         course.price = float(request.form.get('price') or course.price or 0)
         db.session.commit()
         flash('Course updated.', 'success')
         return redirect(url_for('admin_courses'))
-    return render_template('pages/admin-edit-course.html', course=course, trainer_mode=False)
+    return render_template('pages/admin-edit-course.html', course=course, trainer_mode=False, trainers=trainers)
 
 
 @app.route('/admin/courses/<int:course_id>/delete', methods=['POST'])
@@ -733,6 +758,189 @@ def admin_delete_course(course_id):
     db.session.commit()
     flash('Course deleted.', 'success')
     return redirect(url_for('admin_courses'))
+
+
+# ==================== ADMIN SESSION ROUTES ====================
+
+@app.route('/admin/sessions')
+def admin_sessions():
+    if not admin_required():
+        return redirect(url_for('admin_login'))
+    all_sessions = ClassSession.query.order_by(ClassSession.session_date.desc(), ClassSession.session_time).all()
+    courses = Course.query.order_by(Course.name).all()
+    return render_template('pages/admin-sessions.html', sessions=all_sessions, courses=courses)
+
+
+@app.route('/admin/sessions/add', methods=['POST'])
+def admin_add_session():
+    if not admin_required():
+        return redirect(url_for('admin_login'))
+    course_id = request.form.get('course_id')
+    session_date = request.form.get('session_date')
+    session_time = request.form.get('session_time')
+    capacity = int(request.form.get('capacity') or 12)
+    if not all([course_id, session_date, session_time]):
+        flash('Course, date and time are all required.', 'error')
+        return redirect(url_for('admin_sessions'))
+    course = Course.query.get_or_404(course_id)
+    if not course.trainer_id:
+        flash('This course has no assigned trainer. Please assign a trainer to the course first.', 'error')
+        return redirect(url_for('admin_sessions'))
+    new_session = ClassSession(
+        course_id=course.id,
+        session_date=session_date,
+        session_time=session_time,
+        trainer=course.instructor,
+        capacity=capacity,
+        created_by=session.get('username')
+    )
+    db.session.add(new_session)
+    db.session.commit()
+    flash('Session created.', 'success')
+    return redirect(url_for('admin_sessions'))
+
+
+@app.route('/admin/sessions/<int:session_id>/delete', methods=['POST'])
+def admin_delete_session(session_id):
+    if not admin_required():
+        return redirect(url_for('admin_login'))
+    sess = ClassSession.query.get_or_404(session_id)
+    db.session.delete(sess)
+    db.session.commit()
+    flash('Session deleted.', 'success')
+    return redirect(url_for('admin_sessions'))
+
+
+# ==================== ADMIN STAFF ROUTES ====================
+
+@app.route('/admin/staff')
+def admin_staff():
+    if not admin_required():
+        return redirect(url_for('admin_login'))
+    staff = Staff.query.order_by(Staff.name).all()
+    return render_template('pages/admin-staff.html', staff=staff)
+
+
+@app.route('/admin/staff/add', methods=['GET', 'POST'])
+def admin_add_staff():
+    if not admin_required():
+        return redirect(url_for('admin_login'))
+    if request.method == 'POST':
+        name = request.form.get('name')
+        role = request.form.get('role')
+        bio = request.form.get('bio')
+        photo_url = request.form.get('photo_url')
+        if not all([name, role, bio, photo_url]):
+            flash('All fields are required.', 'error')
+            return redirect(url_for('admin_add_staff'))
+        db.session.add(Staff(name=name, role=role, bio=bio, photo_url=photo_url))
+        db.session.commit()
+        flash('Trainer added.', 'success')
+        return redirect(url_for('admin_staff'))
+    return render_template('pages/admin-add-staff.html')
+
+
+@app.route('/admin/staff/<int:staff_id>/edit', methods=['GET', 'POST'])
+def admin_edit_staff(staff_id):
+    if not admin_required():
+        return redirect(url_for('admin_login'))
+    member = Staff.query.get_or_404(staff_id)
+    if request.method == 'POST':
+        member.name = request.form.get('name', member.name)
+        member.role = request.form.get('role', member.role)
+        member.bio = request.form.get('bio', member.bio)
+        member.photo_url = request.form.get('photo_url', member.photo_url)
+        db.session.commit()
+        flash('Trainer updated.', 'success')
+        return redirect(url_for('admin_staff'))
+    return render_template('pages/admin-edit-staff.html', staff=member)
+
+
+@app.route('/admin/staff/<int:staff_id>/delete', methods=['POST'])
+def admin_delete_staff(staff_id):
+    if not admin_required():
+        return redirect(url_for('admin_login'))
+    member = Staff.query.get_or_404(staff_id)
+    db.session.delete(member)
+    db.session.commit()
+    flash('Trainer deleted.', 'success')
+    return redirect(url_for('admin_staff'))
+
+
+# ==================== ADMIN HOURS ROUTES ====================
+
+@app.route('/admin/hours')
+def admin_hours():
+    if not admin_required():
+        return redirect(url_for('admin_login'))
+    hours = OpeningHours.query.order_by(OpeningHours.id).all()
+    return render_template('pages/admin-hours.html', hours=hours)
+
+
+@app.route('/admin/hours/<int:hours_id>/edit', methods=['GET', 'POST'])
+def admin_edit_hours(hours_id):
+    if not admin_required():
+        return redirect(url_for('admin_login'))
+    hours = OpeningHours.query.get_or_404(hours_id)
+    if request.method == 'POST':
+        hours.opening_time = request.form.get('opening_time', hours.opening_time)
+        hours.closing_time = request.form.get('closing_time', hours.closing_time)
+        db.session.commit()
+        flash('Opening hours updated.', 'success')
+        return redirect(url_for('admin_hours'))
+    return render_template('pages/admin-edit-hours.html', hours=hours)
+
+
+# ==================== ADMIN BILLING ROUTE ====================
+
+@app.route('/admin/billing')
+def admin_billing():
+    if not admin_required():
+        return redirect(url_for('admin_login'))
+    payments = Payment.query.order_by(Payment.created_at.desc()).all()
+    total_revenue = db.session.query(db.func.sum(Payment.amount)).scalar() or 0
+    return render_template('pages/admin-billing.html', payments=payments, total_revenue=total_revenue)
+
+
+# ==================== ADMIN BOOKINGS ROUTE ====================
+
+@app.route('/admin/bookings')
+def admin_bookings():
+    if not admin_required():
+        return redirect(url_for('admin_login'))
+    bookings = Booking.query.order_by(Booking.created_at.desc()).all()
+    sessions = ClassSession.query.order_by(ClassSession.session_date.desc(), ClassSession.session_time).all()
+    return render_template('pages/admin-bookings.html', bookings=bookings, sessions=sessions)
+
+
+@app.route('/admin/booking/<int:booking_id>/<action>', methods=['POST'])
+def admin_manage_booking(booking_id, action):
+    if not admin_required():
+        return redirect(url_for('admin_login'))
+    booking = Booking.query.get_or_404(booking_id)
+    if action == 'confirm':
+        booking.status = 'Confirmed'
+        db.session.commit()
+        flash('Booking confirmed.', 'success')
+    elif action == 'cancel':
+        booking.status = 'Cancelled'
+        db.session.commit()
+        flash('Booking cancelled.', 'success')
+    elif action == 'delete':
+        db.session.delete(booking)
+        db.session.commit()
+        flash('Booking deleted.', 'success')
+    return redirect(url_for('admin_bookings'))
+
+
+# ==================== ADMIN MESSAGES ROUTE ====================
+
+@app.route('/admin/messages')
+def admin_messages():
+    if not admin_required():
+        return redirect(url_for('admin_login'))
+    messages = ContactMessage.query.order_by(ContactMessage.created_at.desc()).all()
+    return render_template('pages/admin-messages.html', messages=messages)
 
 
 if __name__ == '__main__':

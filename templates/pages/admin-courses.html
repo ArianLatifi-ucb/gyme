@@ -39,7 +39,14 @@
                             <td><strong>{{ course.name }}</strong></td>
                             <td>{{ course.duration }} min</td>
                             <td>{{ course.schedule }}</td>
-                            <td>{{ course.instructor }}</td>
+                            <td>
+                                {{ course.instructor }}
+                                {% if course.assigned_trainer %}
+                                    <span class="badge-trainer">linked</span>
+                                {% else %}
+                                    <span class="badge-warn">unlinked</span>
+                                {% endif %}
+                            </td>
                             <td>
                                 <a href="{{ url_for('admin_edit_course', course_id=course.id) }}">
                                     <button class="btn-edit">Edit</button>

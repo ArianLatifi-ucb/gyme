@@ -2474,3 +2474,191 @@ button:disabled { opacity:.45; cursor:not-allowed; }
     text-align: center;
 }
 
+/* ── Session Creator Card ─────────────────────────────── */
+.session-creator-card {
+    background: #fff;
+    border: 1px solid #dbe7f4;
+    border-radius: 22px;
+    padding: 2rem 2.2rem;
+    box-shadow: 0 14px 40px rgba(2,12,27,.08);
+}
+.session-creator-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2.5rem;
+    align-items: start;
+}
+.session-col { display: flex; flex-direction: column; gap: 0; }
+
+.sc-section-label {
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    font-weight: 800;
+    color: #1688ff;
+    margin: 0 0 1.1rem 0;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid #e8f2ff;
+}
+.sc-field-group { display: flex; flex-direction: column; gap: 0.35rem; margin-bottom: 0.9rem; }
+.sc-label {
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: #4a5568;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+}
+.sc-select,
+.sc-input {
+    padding: 0.75rem 1rem;
+    border: 1.5px solid #dbe7f4;
+    border-radius: 12px;
+    font-size: 0.97rem;
+    background: #f8fbff;
+    color: #0f3570;
+    width: 100%;
+    box-sizing: border-box;
+    transition: border-color 0.18s, box-shadow 0.18s;
+    appearance: auto;
+}
+.sc-select:focus,
+.sc-input:focus {
+    outline: none;
+    border-color: #1688ff;
+    background: #fff;
+    box-shadow: 0 0 0 3px rgba(22,136,255,.12);
+}
+.sc-row-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.9rem;
+}
+.sc-capacity-row { display: flex; align-items: center; gap: 0.6rem; }
+.sc-capacity-row .sc-input { flex: 1; }
+.sc-capacity-hint { font-size: 0.9rem; color: #8ba4c0; font-weight: 600; white-space: nowrap; }
+
+/* Trainer preview card */
+.sc-trainer-card {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem 1.2rem;
+    border-radius: 16px;
+    background: #f1f7ff;
+    border: 1.5px solid #c9e0ff;
+    margin-top: 0.4rem;
+    transition: background 0.2s, border-color 0.2s;
+}
+.sc-trainer-card.linked {
+    background: #e8f9f0;
+    border-color: #86efac;
+}
+.sc-trainer-card.unlinked {
+    background: #fffbeb;
+    border-color: #fcd34d;
+}
+.sc-trainer-avatar {
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    background: linear-gradient(135deg, #02408f, #1688ff);
+    color: #fff;
+    font-size: 1.3rem;
+    font-weight: 900;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: background 0.2s;
+}
+.sc-trainer-card.unlinked .sc-trainer-avatar {
+    background: linear-gradient(135deg, #92400e, #f59e0b);
+}
+.sc-trainer-info { display: flex; flex-direction: column; gap: 0.2rem; min-width: 0; }
+.sc-trainer-label {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    font-weight: 800;
+    color: #4a7bb7;
+}
+.sc-trainer-card.unlinked .sc-trainer-label { color: #92400e; }
+.sc-trainer-name {
+    font-weight: 700;
+    font-size: 0.97rem;
+    color: #0f3570;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.sc-trainer-name.unlinked { color: #92400e; font-size: 0.88rem; white-space: normal; }
+
+/* Submit button */
+.sc-submit-btn {
+    margin-top: 1.4rem;
+    width: 100%;
+    padding: 0.95rem 1.5rem;
+    background: linear-gradient(135deg, #02408f, #1688ff);
+    color: #fff;
+    border: none;
+    border-radius: 14px;
+    font-size: 1rem;
+    font-weight: 800;
+    letter-spacing: 0.04em;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    box-shadow: 0 8px 24px rgba(22,136,255,.28);
+    transition: opacity 0.18s, transform 0.15s;
+}
+.sc-submit-btn:hover:not(:disabled) { opacity: 0.88; transform: translateY(-1px); }
+.sc-submit-btn:disabled { opacity: 0.4; cursor: not-allowed; transform: none; box-shadow: none; }
+.sc-btn-icon { font-size: 1.3rem; line-height: 1; font-weight: 900; }
+
+@media (max-width: 700px) {
+    .session-creator-grid { grid-template-columns: 1fr; gap: 1.5rem; }
+    .sc-row-2 { grid-template-columns: 1fr 1fr; }
+}
+/* ── end Session Creator Card ─────────────────────────── */
+
+/* trainer assignment badges */
+.badge-trainer {
+    display: inline-block;
+    background: #d4edda;
+    color: #155724;
+    font-size: 0.7rem;
+    padding: 0.1rem 0.45rem;
+    border-radius: 999px;
+    margin-left: 0.4rem;
+    font-weight: 600;
+    vertical-align: middle;
+}
+.badge-warn {
+    display: inline-block;
+    background: #fff3cd;
+    color: #856404;
+    font-size: 0.7rem;
+    padding: 0.1rem 0.45rem;
+    border-radius: 999px;
+    margin-left: 0.4rem;
+    font-weight: 600;
+    vertical-align: middle;
+}
+.trainer-preview-box {
+    padding: 0.6rem 1rem;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background: #f8f8f8;
+    font-size: 0.95rem;
+    min-height: 2.2rem;
+    display: flex;
+    align-items: center;
+}
+.trainer-linked { color: #155724; font-weight: 600; }
+.trainer-unlinked { color: #856404; }
+.status-open { color: #155724; font-weight: 600; }
+.status-cancelled { color: #721c24; font-weight: 600; }
+.form-hint { font-size: 0.85rem; color: #856404; margin-top: 0.25rem; }
+

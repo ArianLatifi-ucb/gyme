@@ -45,7 +45,7 @@
         <div class="stat-card">
             <h3>{{ total_sessions }}</h3>
             <p>Class Sessions</p>
-            <a href="{{ url_for('admin_bookings') }}" class="stat-link">Manage Schedule →</a>
+            <a href="{{ url_for('admin_sessions') }}" class="stat-link">Manage Sessions →</a>
         </div>
 
         <div class="stat-card">
@@ -70,10 +70,11 @@
             <li><a href="{{ url_for('admin_staff') }}"> Manage Trainers</a></li>
             <li><a href="{{ url_for('admin_add_staff') }}"> Add New Trainer</a></li>
             <li><a href="{{ url_for('admin_hours') }}"> Manage Opening Hours</a></li>
-            <li><a href="{{ url_for('admin_bookings') }}"> Manage Bookings & Class Sessions</a></li>
+            <li><a href="{{ url_for('admin_sessions') }}"> Manage Class Sessions</a></li>
+            <li><a href="{{ url_for('admin_bookings') }}"> Manage Bookings</a></li>
             <li><a href="{{ url_for('admin_billing') }}"> View Billing Records</a></li>
             <li><a href="{{ url_for('admin_messages') }}"> View Contact Messages</a></li>
-            <li><a href="{{ url_for('trainer_dashboard') }}"> Trainer Booking View</a></li>
+            <li><a href="{{ url_for('admin_sessions') }}"> Schedule Class Sessions</a></li>
         </ul>
     </div>
 </section>
