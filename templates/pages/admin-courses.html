@@ -1,13 +1,13 @@
 {% extends "base.html" %}
 
-{% block title %}Manage Courses - GymE{% endblock %}
+{% block title %}Manage classes - GymE{% endblock %}
 
-{% block header_title %}Course Management{% endblock %}
-{% block header_subtitle %}Add, edit, or remove courses{% endblock %}
+{% block header_title %}class Management{% endblock %}
+{% block header_subtitle %}Add, edit, or remove classes{% endblock %}
 
 {% block content %}
 <section id="courses-management">
-    <h2>Manage Courses</h2>
+    <h2>Manage classes</h2>
 
     {% with messages = get_flashed_messages(with_categories=true) %}
         {% if messages %}
@@ -18,7 +18,7 @@
     {% endwith %}
 
     <div style="margin-bottom: 2rem;">
-        <a href="{{ url_for('admin_add_course') }}"><button class="btn-primary">+ Add New Course</button></a>
+        <a href="{{ url_for('admin_add_course') }}"><button class="btn-primary">+ Add New classe</button></a>
     </div>
 
     {% if courses %}
@@ -26,7 +26,7 @@
             <table class="admin-table">
                 <thead>
                     <tr>
-                        <th>Course Name</th>
+                        <th>class Name</th>
                         <th>Duration</th>
                         <th>Schedule</th>
                         <th>Instructor</th>
@@ -61,7 +61,7 @@
             </table>
         </div>
     {% else %}
-        <p>No courses found. <a href="{{ url_for('admin_add_course') }}">Create one</a></p>
+        <p>No classes found. <a href="{{ url_for('admin_add_course') }}">Create one</a></p>
     {% endif %}
 </section>
 {% endblock %}

@@ -5,19 +5,19 @@
 {% block content %}
 <section class="dashboard-hero-card pro-dashboard">
   <div><p class="eyebrow dark">Full admin control</p><h2>Bookings & Sessions</h2><p>Manage member attendance, cancelled bookings and available class sessions.</p></div>
-  <div class="dashboard-actions"><a href="{{ url_for('admin_add_course') }}" class="button-link">+ Add Course</a><a href="{{ url_for('admin_sessions') }}" class="button-link secondary">Schedule Sessions</a></div>
+  <div class="dashboard-actions"><a href="{{ url_for('admin_add_course') }}" class="button-link">+ Add class</a><a href="{{ url_for('admin_sessions') }}" class="button-link secondary">Schedule Sessions</a></div>
 </section>
 <section>
 <h2>Class Sessions</h2>
 <div class="admin-table-container"><table class="admin-table normal-table">
-<thead><tr><th>Course</th><th>Date</th><th>Time</th><th>Trainer</th><th>Booked</th><th>Capacity</th><th>Status</th><th>Action</th></tr></thead>
+<thead><tr><th>class</th><th>Date</th><th>Time</th><th>Trainer</th><th>Booked</th><th>Capacity</th><th>Status</th><th>Action</th></tr></thead>
 <tbody>{% for s in sessions %}<tr><td>{{ s.course.name }}</td><td>{{ s.session_date }}</td><td>{{ s.session_time }}</td><td>{{ s.trainer }}</td><td>{{ s.confirmed_count }}</td><td>{{ s.capacity }}</td><td>{{ s.status }}</td><td>{% if s.status == 'Open' %}<form method="POST" action="{{ url_for('cancel_session', session_id=s.id) }}" class="inline-form"><button class="btn-delete">Cancel Session</button></form>{% else %}<form method="POST" action="{{ url_for('open_session', session_id=s.id) }}" class="inline-form"><button class="btn-edit">Reopen</button></form>{% endif %}</td></tr>{% else %}<tr><td colspan="8">No sessions yet.</td></tr>{% endfor %}</tbody>
 </table></div>
 </section>
 <section>
 <h2>Member Bookings</h2>
 <div class="admin-table-container"><table class="admin-table normal-table">
-<thead><tr><th>ID</th><th>Member</th><th>Course</th><th>Date</th><th>Time</th><th>Status</th><th>Actions</th></tr></thead>
+<thead><tr><th>ID</th><th>Member</th><th>class</th><th>Date</th><th>Time</th><th>Status</th><th>Actions</th></tr></thead>
 <tbody>{% for b in bookings %}<tr><td>{{ b.id }}</td><td>{{ b.user.username }}</td><td>{{ b.course.name }}</td><td>{{ b.booking_date }}</td><td>{{ b.booking_time }}</td><td>{{ b.status }}</td><td><form method="POST" action="{{ url_for('admin_manage_booking', booking_id=b.id, action='confirm') }}" class="inline-form"><button class="btn-edit">Confirm</button></form><form method="POST" action="{{ url_for('admin_manage_booking', booking_id=b.id, action='cancel') }}" class="inline-form"><button class="btn-secondary">Cancel</button></form><form method="POST" action="{{ url_for('admin_manage_booking', booking_id=b.id, action='delete') }}" class="inline-form" onsubmit="return confirm('Delete this booking?');"><button class="btn-delete">Delete</button></form></td></tr>{% else %}<tr><td colspan="7">No bookings yet.</td></tr>{% endfor %}</tbody>
 </table></div>
 </section>

@@ -21,7 +21,7 @@
         <a class="brand" href="/"><img src="{{ url_for('static', filename='images/logo.png') }}" alt="GymE" class="nav-logo"><span>GymE</span></a>
         <ul>
             <li><a href="/">Home</a></li>
-            <li><a href="/courses">Courses</a></li>
+            <li><a href="/courses">Classes</a></li>
             {% if session.get('username') %}
                 {% if session.get('role') == 'admin' %}
                     <li><a href="{{ url_for('admin_dashboard') }}">Dashboard</a></li>

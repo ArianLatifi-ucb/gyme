@@ -12,13 +12,13 @@
         <div>
             <p class="eyebrow dark">Live booking schedule</p>
             <h2>Available Sessions</h2>
-            <p>Upcoming open classes managed by trainers and admins. Use the filter to find a specific course.</p>
+            <p>Upcoming open classes managed by trainers and admins. Use the filter to find a specific class.</p>
         </div>
 
         <form class="course-filter-card" method="GET" action="{{ url_for('courses') }}">
-            <label for="course">Filter by course</label>
+            <label for="course">Filter by class</label>
             <select id="course" name="course" onchange="this.form.submit()">
-                <option value="">All Courses</option>
+                <option value="">All classes</option>
                 {% for c in courses %}
                     <option value="{{ c.name }}" {% if c.name == course_filter %}selected{% endif %}>{{ c.name }}</option>
                 {% endfor %}
@@ -73,7 +73,7 @@
     <div class="empty-state">
         {% if course_filter %}
             <h3>No upcoming sessions for "{{ course_filter }}"</h3>
-            <p><a href="{{ url_for('courses') }}">View all courses</a></p>
+            <p><a href="{{ url_for('courses') }}">View all classs</a></p>
         {% else %}
             <h3>No sessions scheduled yet</h3>
             <p>Check back soon or contact us for more information.</p>

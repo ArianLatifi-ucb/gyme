@@ -2,12 +2,12 @@
 
 {% block title %}Edit Course - GymE{% endblock %}
 
-{% block header_title %}Edit Course{% endblock %}
-{% block header_subtitle %}Update course details{% endblock %}
+{% block header_title %}Edit class{% endblock %}
+{% block header_subtitle %}Update class details{% endblock %}
 
 {% block content %}
 <section id="edit-course">
-    <h2>Edit Course</h2>
+    <h2>Edit class</h2>
 
     {% with messages = get_flashed_messages(with_categories=true) %}
         {% if messages %}
@@ -18,7 +18,7 @@
     {% endwith %}
 
     <form method="POST" class="admin-form">
-        <label for="name">Course Name:</label>
+        <label for="name">class Name:</label>
         <input type="text" id="name" name="name" value="{{ course.name }}" required>
 
         <label for="description">Description:</label>
@@ -58,7 +58,7 @@
         <input type="number" id="price" name="price" value="{{ course.price or 0 }}" min="0" step="0.01" placeholder="0 = free">
 
         <div class="form-actions">
-            <button type="submit" class="btn-primary">Update Course</button>
+            <button type="submit" class="btn-primary">Update class</button>
             <a href="{{ url_for('trainer_dashboard') if trainer_mode else url_for('admin_courses') }}"><button type="button" class="btn-secondary">Cancel</button></a>
         </div>
     </form>
