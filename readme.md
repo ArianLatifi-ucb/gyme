@@ -28,13 +28,19 @@ Open terminal and run:
 
 pip install -r requirements.txt
 
-### 4. Run the project
+### 4. start the database
+
+Run this command:
+
+python init_db.py
+
+### 5. Run the project
 
 Run this command:
 
 python app.py
 
-### 5. Open browser
+### 6. Open browser
 
 Open this link in browser:
 
